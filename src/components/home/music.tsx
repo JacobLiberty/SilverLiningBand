@@ -48,7 +48,7 @@ export function Music() {
                 poster="/images/band/gallery-band-remic.jpg"
                 className="max-h-[70vh] w-full rounded-lg object-contain"
               >
-                <source src="/video/featured.mp4" type="video/mp4" />
+                <source src="/video/cant-let-go.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>

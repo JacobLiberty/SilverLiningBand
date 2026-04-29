@@ -181,15 +181,30 @@ export function Hero({ bandName, tagline }: HeroProps) {
       >
         <button
           onClick={toggleMute}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-cream/20 bg-midnight/50 backdrop-blur-sm text-cream/70 transition-all duration-200 hover:border-amber/40 hover:text-cream"
+          className={`flex items-center gap-2.5 rounded-full border backdrop-blur-sm transition-all duration-300 ${
+            isMuted
+              ? "border-amber/40 bg-amber/10 px-5 py-2.5 text-amber hover:bg-amber/20"
+              : "border-cream/20 bg-midnight/50 h-10 w-10 justify-center text-cream/70 hover:border-amber/40 hover:text-cream"
+          }`}
           aria-label={isMuted ? "Unmute" : "Mute"}
         >
           {isMuted ? (
-            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M11 5 6 9H2v6h4l5 4V5Z" />
-              <line x1="23" x2="17" y1="9" y2="15" />
-              <line x1="17" x2="23" y1="9" y2="15" />
-            </svg>
+            <>
+              {/* Pulsing ring when muted */}
+              <motion.span
+                className="absolute inset-0 rounded-full border border-amber/30"
+                animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <svg className="h-4 w-4 relative" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+                <line x1="23" x2="17" y1="9" y2="15" />
+                <line x1="17" x2="23" y1="9" y2="15" />
+              </svg>
+              <span className="relative font-body text-[11px] font-medium tracking-[0.1em] uppercase">
+                Hear us live
+              </span>
+            </>
           ) : (
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M11 5 6 9H2v6h4l5 4V5Z" />

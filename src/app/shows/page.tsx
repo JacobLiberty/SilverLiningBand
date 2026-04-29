@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { client } from "@/lib/sanity/client";
+import { client, isSanityConfigured } from "@/lib/sanity/client";
 import { upcomingShowsQuery, pastShowsQuery } from "@/lib/sanity/queries";
 import { ShowList } from "@/components/shows/show-list";
 
@@ -11,10 +11,12 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function ShowsPage() {
-  const [upcoming, past] = await Promise.all([
-    client.fetch(upcomingShowsQuery),
-    client.fetch(pastShowsQuery),
-  ]);
+  const [upcoming, past] = isSanityConfigured
+    ? await Promise.all([
+        client.fetch(upcomingShowsQuery).catch(() => []),
+        client.fetch(pastShowsQuery).catch(() => []),
+      ])
+    : [[], []];
 
   return (
     <div className="min-h-screen bg-surface px-6 pt-28 pb-16">

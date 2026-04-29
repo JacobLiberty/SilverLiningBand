@@ -5,7 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { urlFor } from "@/lib/sanity/image";
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import type { SanityImageSource } from "@sanity/image-url";
 
 interface HeroProps {
   bandName: string;
@@ -39,17 +39,20 @@ export function Hero({ bandName, tagline, heroImage }: HeroProps) {
         <p className="mt-4 text-lg text-silver">{tagline}</p>
 
         <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <Button asChild size="lg" className="bg-silver text-surface hover:bg-silver-light">
-            <Link href="/book">Book Us</Link>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            size="lg"
-            className="border-border-accent text-silver hover:bg-surface-overlay"
-          >
-            <Link href="/shows">See Shows</Link>
-          </Button>
+          <Link href="/book">
+            <Button size="lg" className="bg-silver text-surface hover:bg-silver-light">
+              Book Us
+            </Button>
+          </Link>
+          <Link href="/shows">
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-border-accent text-silver hover:bg-surface-overlay"
+            >
+              See Shows
+            </Button>
+          </Link>
         </div>
       </motion.div>
     </section>

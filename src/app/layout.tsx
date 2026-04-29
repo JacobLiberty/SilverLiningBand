@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { client } from "@/lib/sanity/client";
+import { client, isSanityConfigured } from "@/lib/sanity/client";
 import { siteSettingsQuery } from "@/lib/sanity/queries";
 import "./globals.css";
 
@@ -22,7 +22,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const settings = await client.fetch(siteSettingsQuery);
+  const settings = isSanityConfigured
+    ? await client.fetch(siteSettingsQuery).catch(() => null)
+    : null;
 
   return (
     <html lang="en" className={inter.variable}>

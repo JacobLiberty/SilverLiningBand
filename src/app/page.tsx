@@ -1,4 +1,4 @@
-import { client } from "@/lib/sanity/client";
+import { client, isSanityConfigured } from "@/lib/sanity/client";
 import {
   siteSettingsQuery,
   upcomingShowsPreviewQuery,
@@ -13,11 +13,13 @@ import { Gallery } from "@/components/home/gallery";
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [settings, shows, gallery] = await Promise.all([
-    client.fetch(siteSettingsQuery),
-    client.fetch(upcomingShowsPreviewQuery),
-    client.fetch(galleryImagesQuery),
-  ]);
+  const [settings, shows, gallery] = isSanityConfigured
+    ? await Promise.all([
+        client.fetch(siteSettingsQuery).catch(() => null),
+        client.fetch(upcomingShowsPreviewQuery).catch(() => []),
+        client.fetch(galleryImagesQuery).catch(() => []),
+      ])
+    : [null, [], []];
 
   return (
     <>

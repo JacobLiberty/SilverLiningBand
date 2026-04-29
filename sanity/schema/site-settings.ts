@@ -9,7 +9,7 @@ export const siteSettings = defineType({
       name: "bandName",
       title: "Band Name",
       type: "string",
-      initialValue: "The Real Silver Lining Band",
+      initialValue: "Silver Lining Band",
     }),
     defineField({
       name: "tagline",

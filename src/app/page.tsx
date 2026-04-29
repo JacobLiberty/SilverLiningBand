@@ -24,8 +24,8 @@ export default async function HomePage() {
   return (
     <>
       <Hero
-        bandName={settings?.bandName || "The Real Silver Lining Band"}
-        tagline={settings?.tagline || "Classic rock from the golden era"}
+        bandName={settings?.bandName || "Silver Lining Band"}
+        tagline={settings?.tagline || "Classic rock covers from the golden era — Fleetwood Mac, Eagles, Beatles & more"}
         heroImage={settings?.heroImage}
       />
       <About bio={settings?.bio} />

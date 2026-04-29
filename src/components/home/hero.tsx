@@ -143,7 +143,7 @@ export function Hero({ bandName, tagline }: HeroProps) {
             <span className="block text-5xl sm:text-7xl lg:text-8xl italic text-gradient-amber leading-[1.15] pb-1">
               Lining
             </span>
-            <span className="block text-2xl sm:text-3xl lg:text-4xl font-light tracking-[0.2em] text-silver mt-3">
+            <span className="block text-5xl sm:text-7xl lg:text-8xl leading-none">
               Band
             </span>
           </motion.h1>
@@ -229,18 +229,26 @@ export function Hero({ bandName, tagline }: HeroProps) {
         </button>
       </motion.div>
 
-      {/* Scroll indicator — bottom center */}
+      {/* Scroll arrow — bottom center */}
       <motion.div
         className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
       >
-        <motion.div
-          className="w-[1px] h-12 bg-linear-to-b from-amber/60 to-transparent"
-          animate={{ scaleY: [1, 0.5, 1] }}
+        <motion.svg
+          className="h-6 w-6 text-amber/70"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        />
+        >
+          <path d="m6 9 6 6 6-6" />
+        </motion.svg>
       </motion.div>
     </section>
   );

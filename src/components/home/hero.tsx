@@ -1,8 +1,9 @@
 "use client";
 
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { urlFor } from "@/lib/sanity/image";
 import type { SanityImageSource } from "@sanity/image-url";
@@ -13,106 +14,89 @@ interface HeroProps {
   heroImage?: SanityImageSource;
 }
 
-/** Collage images — each with position, size, rotation, and drift animation */
-const collageImages = [
-  {
-    src: "/images/band/hero-group.jpg",
-    alt: "Silver Lining Band",
-    className: "absolute top-[8%] right-[5%] w-[55%] sm:w-[45%] aspect-[4/3] z-[3]",
-    rotate: 3,
-    drift: { x: [0, 8, 0], y: [0, -6, 0] },
-    duration: 18,
-  },
-  {
-    src: "/images/band/nancy-bw.jpg",
-    alt: "Nancy performing",
-    className: "absolute top-[25%] left-[2%] w-[40%] sm:w-[32%] aspect-[3/4] z-[2]",
-    rotate: -4,
-    drift: { x: [0, -5, 0], y: [0, 8, 0] },
-    duration: 22,
-  },
-  {
-    src: "/images/band/greg-bw.jpg",
-    alt: "Greg on guitar",
-    className: "absolute bottom-[15%] right-[8%] w-[38%] sm:w-[30%] aspect-square z-[1]",
-    rotate: 5,
-    drift: { x: [0, 6, 0], y: [0, 5, 0] },
-    duration: 20,
-  },
-  {
-    src: "/images/band/dom-bw.jpg",
-    alt: "Dom on guitar",
-    className: "absolute bottom-[22%] left-[15%] w-[30%] sm:w-[24%] aspect-[4/5] z-[4]",
-    rotate: -2,
-    drift: { x: [0, -4, 0], y: [0, -7, 0] },
-    duration: 24,
-  },
+const SLIDE_DURATION = 6000; // ms per slide
+
+const slides = [
+  { src: "/images/band/hero-group.jpg", alt: "Silver Lining Band" },
+  { src: "/images/band/nancy-bw.jpg", alt: "Nancy performing" },
+  { src: "/images/band/gallery-remic-group.jpg", alt: "Live at Remic Rapids" },
+  { src: "/images/band/greg-bw.jpg", alt: "Greg on guitar" },
+  { src: "/images/band/gallery-remic-night.jpg", alt: "Night performance" },
+  { src: "/images/band/dom-bw.jpg", alt: "Dom on guitar" },
+  { src: "/images/band/steve-bw.jpg", alt: "Steve at the mic" },
+];
+
+/** Ken Burns — alternate between zoom-in and zoom-out with subtle drift */
+const kenBurnsVariants = [
+  { scale: [1, 1.08], x: [0, -15], y: [0, -10] },
+  { scale: [1.06, 1], x: [-10, 10], y: [-5, 5] },
+  { scale: [1, 1.06], x: [0, 12], y: [0, -8] },
+  { scale: [1.05, 1], x: [8, -8], y: [-8, 0] },
 ];
 
 export function Hero({ bandName, tagline, heroImage }: HeroProps) {
-  // If Sanity provides a hero image, use it as the primary collage image
-  if (heroImage) {
-    collageImages[0] = {
-      ...collageImages[0],
-      src: urlFor(heroImage).width(1200).quality(80).url(),
-    };
-  }
+  const [current, setCurrent] = useState(0);
+
+  // Override first slide with Sanity hero image if available
+  const allSlides = heroImage
+    ? [
+        { src: urlFor(heroImage).width(1920).quality(80).url(), alt: "Silver Lining Band" },
+        ...slides.slice(1),
+      ]
+    : slides;
+
+  const advance = useCallback(() => {
+    setCurrent((prev) => (prev + 1) % allSlides.length);
+  }, [allSlides.length]);
+
+  useEffect(() => {
+    const timer = setInterval(advance, SLIDE_DURATION);
+    return () => clearInterval(timer);
+  }, [advance]);
+
+  const kenBurns = kenBurnsVariants[current % kenBurnsVariants.length];
 
   return (
     <section className="relative min-h-screen flex items-end overflow-hidden bg-midnight">
-      {/* Collage images — slowly drifting */}
-      {collageImages.map((img, i) => (
+      {/* Background slideshow with crossfade + Ken Burns */}
+      <AnimatePresence mode="popLayout">
         <motion.div
-          key={img.src}
-          className={img.className}
-          initial={{ opacity: 0, scale: 0.9, rotate: img.rotate }}
+          key={current}
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
           animate={{
-            opacity: [0, 1],
-            scale: [0.9, 1],
-            x: img.drift.x,
-            y: img.drift.y,
+            opacity: 1,
+            scale: kenBurns.scale,
+            x: kenBurns.x,
+            y: kenBurns.y,
           }}
+          exit={{ opacity: 0 }}
           transition={{
-            opacity: { duration: 1.2, delay: 0.3 + i * 0.2 },
-            scale: { duration: 1.2, delay: 0.3 + i * 0.2 },
-            x: {
-              duration: img.duration,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.5,
-            },
-            y: {
-              duration: img.duration,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.5,
-            },
+            opacity: { duration: 1.5, ease: "easeInOut" },
+            scale: { duration: SLIDE_DURATION / 1000, ease: "linear" },
+            x: { duration: SLIDE_DURATION / 1000, ease: "linear" },
+            y: { duration: SLIDE_DURATION / 1000, ease: "linear" },
           }}
-          style={{ rotate: img.rotate }}
         >
-          <div className="relative w-full h-full overflow-hidden rounded-sm shadow-2xl shadow-black/40">
-            <Image
-              src={img.src}
-              alt={img.alt}
-              fill
-              className="object-cover"
-              priority={i === 0}
-              sizes={i === 0 ? "(max-width: 768px) 55vw, 45vw" : "(max-width: 768px) 40vw, 30vw"}
-            />
-            {/* Subtle warm tint on each image */}
-            <div className="absolute inset-0 bg-amber/[0.06] mix-blend-overlay" />
-          </div>
-          {/* Drop shadow / border effect */}
-          <div className="absolute inset-0 rounded-sm border border-cream/[0.08]" />
+          <Image
+            src={allSlides[current].src}
+            alt={allSlides[current].alt}
+            fill
+            className="object-cover"
+            priority={current === 0}
+            sizes="100vw"
+          />
+          {/* Warm tint */}
+          <div className="absolute inset-0 bg-amber/[0.04] mix-blend-overlay" />
         </motion.div>
-      ))}
+      </AnimatePresence>
 
-      {/* Dark vignette overlay */}
+      {/* Overlays */}
       <div className="absolute inset-0 bg-midnight/50 z-[5]" />
-      <div className="absolute inset-0 bg-linear-to-t from-midnight via-midnight/40 to-midnight/20 z-[5]" />
-      <div className="absolute inset-0 bg-linear-to-r from-midnight/70 via-transparent to-transparent z-[5]" />
+      <div className="absolute inset-0 bg-linear-to-t from-midnight via-midnight/50 to-midnight/20 z-[5]" />
+      <div className="absolute inset-0 bg-linear-to-r from-midnight/60 via-transparent to-transparent z-[5]" />
 
-      {/* Warm ambient glow — bar lighting */}
+      {/* Warm ambient glow */}
       <div className="absolute bottom-0 left-1/4 w-[500px] h-[400px] bg-amber/[0.06] blur-[120px] rounded-full z-[5]" />
       <div className="absolute top-1/3 right-0 w-[300px] h-[300px] bg-amber/[0.03] blur-[100px] rounded-full z-[5]" />
 
@@ -188,19 +172,21 @@ export function Hero({ bandName, tagline, heroImage }: HeroProps) {
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-      >
-        <motion.div
-          className="w-[1px] h-12 bg-linear-to-b from-amber/60 to-transparent"
-          animate={{ scaleY: [1, 0.5, 1] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </motion.div>
+      {/* Slide indicators */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+        {allSlides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`h-[2px] rounded-full transition-all duration-500 ${
+              i === current
+                ? "w-8 bg-amber"
+                : "w-3 bg-cream/20 hover:bg-cream/40"
+            }`}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
+      </div>
     </section>
   );
 }

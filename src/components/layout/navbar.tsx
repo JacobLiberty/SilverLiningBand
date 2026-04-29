@@ -64,9 +64,9 @@ export function Navbar() {
             <Image
               src="/images/band/logo.png"
               alt="Silver Lining Band"
-              width={140}
-              height={50}
-              className="h-10 w-auto invert mix-blend-screen opacity-90 transition-opacity group-hover:opacity-100"
+              width={280}
+              height={100}
+              className="h-20 w-auto invert mix-blend-screen opacity-90 transition-opacity group-hover:opacity-100"
               priority
             />
           </Link>

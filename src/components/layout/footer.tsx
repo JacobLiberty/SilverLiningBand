@@ -70,12 +70,45 @@ export function Footer({ socialLinks }: FooterProps) {
             </p>
           </div>
 
-          {/* Links */}
+          {/* Book Us CTA */}
           <div className="flex flex-col items-start md:items-center">
             <h4 className="text-xs font-body font-medium tracking-[0.2em] uppercase text-amber mb-4">
-              Navigate
+              Book Us
             </h4>
-            <div className="flex flex-col gap-3">
+            <p className="text-sm text-cream-dim leading-relaxed mb-4 text-center max-w-[220px]">
+              Planning an event? We&apos;d love to play for you.
+            </p>
+            <Link
+              href="/book"
+              className="inline-block rounded-sm bg-amber px-6 py-2.5 text-xs font-body font-medium tracking-[0.15em] uppercase text-midnight transition-all duration-300 hover:bg-amber-light glow-amber-sm"
+            >
+              Get in Touch
+            </Link>
+          </div>
+
+          {/* Social + Links */}
+          <div className="flex flex-col items-start md:items-end">
+            <h4 className="text-xs font-body font-medium tracking-[0.2em] uppercase text-amber mb-4">
+              Follow Us
+            </h4>
+            <div className="flex gap-5 mb-6">
+              {socialIcons.map(({ key, icon: Icon, label }) => {
+                const url = socialLinks?.[key] || "#";
+                return (
+                  <a
+                    key={key}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-12 w-12 items-center justify-center rounded-full border border-border-warm text-cream-dim transition-all duration-300 hover:text-amber hover:border-amber hover:glow-amber-sm"
+                    aria-label={label}
+                  >
+                    <Icon className="h-5 w-5" />
+                  </a>
+                );
+              })}
+            </div>
+            <div className="flex gap-6">
               {footerLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -85,30 +118,6 @@ export function Footer({ socialLinks }: FooterProps) {
                   {link.label}
                 </Link>
               ))}
-            </div>
-          </div>
-
-          {/* Social */}
-          <div className="flex flex-col items-start md:items-end">
-            <h4 className="text-xs font-body font-medium tracking-[0.2em] uppercase text-amber mb-4">
-              Follow Us
-            </h4>
-            <div className="flex gap-4">
-              {socialIcons.map(({ key, icon: Icon, label }) => {
-                const url = socialLinks?.[key] || "#";
-                return (
-                  <a
-                    key={key}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-border-warm text-cream-dim transition-all duration-300 hover:text-amber hover:border-amber hover:glow-amber-sm"
-                    aria-label={label}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </a>
-                );
-              })}
             </div>
           </div>
         </div>

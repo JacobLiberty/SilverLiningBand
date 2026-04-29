@@ -73,7 +73,7 @@ export function About({ bio }: AboutProps) {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.2 }}
             >
-              <span className="text-amber text-lg">&#9830;</span>
+              <span className="text-amber text-lg">&#9835;</span>
             </motion.div>
 
             {/* Pull quote */}
@@ -84,7 +84,7 @@ export function About({ bio }: AboutProps) {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.25 }}
             >
-              <p className="font-display text-xl italic leading-relaxed text-silver-light md:text-2xl">
+              <p className="font-display text-xl italic leading-relaxed text-cream md:text-2xl">
                 &ldquo;Music is the silver lining in every storm.&rdquo;
               </p>
             </motion.blockquote>

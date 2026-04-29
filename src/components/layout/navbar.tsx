@@ -78,7 +78,7 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleScrollLink(e, link.href)}
-                  className="relative text-xs font-body font-light tracking-[0.15em] uppercase text-cream-dim transition-colors hover:text-cream cursor-pointer"
+                  className="relative text-xs font-body font-normal tracking-[0.15em] uppercase text-cream-dim transition-colors hover:text-cream cursor-pointer"
                 >
                   {link.label}
                 </a>
@@ -96,7 +96,7 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-xs font-body font-light tracking-[0.15em] uppercase text-cream-dim transition-colors hover:text-amber"
+                  className="text-xs font-body font-normal tracking-[0.15em] uppercase text-cream-dim transition-colors hover:text-amber"
                 >
                   {link.label}
                 </Link>

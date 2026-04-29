@@ -45,7 +45,7 @@ export default async function ShowsPage() {
         <div className="mx-auto mt-8 flex max-w-xs items-center gap-4">
           <span className="h-px flex-1 bg-gradient-to-r from-transparent to-amber/30" />
           <span className="text-amber/60" aria-hidden="true">
-            &#9830;
+            &#9835;
           </span>
           <span className="h-px flex-1 bg-gradient-to-l from-transparent to-amber/30" />
         </div>

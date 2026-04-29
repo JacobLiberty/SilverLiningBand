@@ -57,14 +57,14 @@ function getCaption(item: DisplayImage): string {
   return item.caption ?? "Band photo";
 }
 
-/** Bento grid layout classes per index position */
+/** Bento grid — explicit row/col placement to prevent overlap */
 const BENTO_CLASSES = [
-  "col-span-2 row-span-2 aspect-[4/3]",   // 0 — hero, large
-  "col-span-1 row-span-1 aspect-square",    // 1
-  "col-span-1 row-span-1 aspect-square",    // 2
-  "col-span-1 row-span-2 aspect-[3/4]",     // 3 — tall
-  "col-span-1 row-span-1 aspect-square",    // 4
-  "col-span-1 row-span-1 aspect-square",    // 5
+  "col-start-1 col-end-3 row-start-1 row-end-3",   // 0 — hero, 2x2
+  "col-start-3 col-end-4 row-start-1 row-end-2",    // 1 — top right
+  "col-start-3 col-end-4 row-start-2 row-end-3",    // 2 — mid right
+  "col-start-1 col-end-2 row-start-3 row-end-5",    // 3 — tall left
+  "col-start-2 col-end-3 row-start-3 row-end-4",    // 4 — mid
+  "col-start-3 col-end-4 row-start-3 row-end-4",    // 5 — right
 ] as const;
 
 const itemVariants = {
@@ -120,11 +120,11 @@ export function Gallery({ images }: GalleryProps) {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <span className="text-amber text-sm">&#9830;</span>
+          <span className="text-amber text-sm">&#9835;</span>
         </motion.div>
 
-        {/* Bento grid */}
-        <div className="grid auto-rows-[180px] grid-cols-2 gap-2 sm:grid-cols-3 md:auto-rows-[200px] md:gap-3">
+        {/* Bento grid — explicit placement, no overlap */}
+        <div className="grid grid-cols-3 grid-rows-4 gap-2 md:gap-3" style={{ gridAutoRows: "180px" }}>
           {displayImages.slice(0, 6).map((item, i) => {
             const bentoClass = BENTO_CLASSES[i] ?? "col-span-1 row-span-1 aspect-square";
             return (

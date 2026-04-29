@@ -64,16 +64,16 @@ export function Hero({ bandName, tagline, heroImage }: HeroProps) {
 
           {/* Band name — editorial treatment */}
           <motion.h1
-            className="font-display font-bold text-cream leading-[0.9] tracking-wide"
+            className="font-display font-bold text-cream tracking-wide"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
             <span className="block text-5xl sm:text-7xl lg:text-8xl">Silver</span>
-            <span className="block text-5xl sm:text-7xl lg:text-8xl italic text-gradient-amber">
+            <span className="block text-5xl sm:text-7xl lg:text-8xl italic text-gradient-amber leading-[1.15] pb-1">
               Lining
             </span>
-            <span className="block text-2xl sm:text-3xl lg:text-4xl font-light tracking-[0.2em] text-silver mt-2">
+            <span className="block text-2xl sm:text-3xl lg:text-4xl font-light tracking-[0.2em] text-silver mt-3">
               Band
             </span>
           </motion.h1>

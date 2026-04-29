@@ -123,8 +123,14 @@ export function Gallery({ images }: GalleryProps) {
           <span className="text-amber text-sm">&#9835;</span>
         </motion.div>
 
-        {/* Bento grid — explicit placement, no overlap */}
-        <div className="grid grid-cols-3 grid-rows-4 gap-2 md:gap-3" style={{ gridAutoRows: "180px" }}>
+        {/* Bento grid — explicit placement with fixed row heights */}
+        <div
+          className="grid gap-2 md:gap-3"
+          style={{
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateRows: "repeat(4, 180px)",
+          }}
+        >
           {displayImages.slice(0, 6).map((item, i) => {
             const bentoClass = BENTO_CLASSES[i] ?? "col-span-1 row-span-1 aspect-square";
             return (

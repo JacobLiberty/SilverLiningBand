@@ -9,11 +9,13 @@ const AUDIO_SRC = "/audio/sample.mp4";
 export function AudioPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
+  const ctxRef = useRef<AudioContext | null>(null);
   const animFrameRef = useRef<number>(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasAudio, setHasAudio] = useState(false);
   const [bars, setBars] = useState<number[]>(Array(BAR_COUNT).fill(0));
   const [isVisible, setIsVisible] = useState(true);
+  const hasAutoPlayed = useRef(false);
 
   // Check if audio file exists on mount
   useEffect(() => {
@@ -43,15 +45,15 @@ export function AudioPlayer() {
     draw();
   }, []);
 
-  const togglePlay = useCallback(async () => {
+  const startPlayback = useCallback(async () => {
     if (!audioRef.current) {
       const audio = new Audio(AUDIO_SRC);
       audio.loop = true;
-      audio.volume = 0.4;
+      audio.volume = 0.3;
       audioRef.current = audio;
 
-      // Set up Web Audio API for visualization
       const ctx = new AudioContext();
+      ctxRef.current = ctx;
       const source = ctx.createMediaElementSource(audio);
       const analyser = ctx.createAnalyser();
       analyser.fftSize = 128;
@@ -60,16 +62,51 @@ export function AudioPlayer() {
       analyserRef.current = analyser;
     }
 
+    if (ctxRef.current?.state === "suspended") {
+      await ctxRef.current.resume();
+    }
+
+    await audioRef.current.play();
+    setIsPlaying(true);
+    visualize();
+  }, [visualize]);
+
+  const togglePlay = useCallback(async () => {
     if (isPlaying) {
-      audioRef.current.pause();
+      audioRef.current?.pause();
       cancelAnimationFrame(animFrameRef.current);
       setBars(Array(BAR_COUNT).fill(0));
+      setIsPlaying(false);
     } else {
-      await audioRef.current.play();
-      visualize();
+      await startPlayback();
     }
-    setIsPlaying(!isPlaying);
-  }, [isPlaying, visualize]);
+  }, [isPlaying, startPlayback]);
+
+  // Autoplay on first user interaction (click/touch/keydown anywhere on page)
+  useEffect(() => {
+    if (!hasAudio || hasAutoPlayed.current) return;
+
+    const handleInteraction = () => {
+      if (hasAutoPlayed.current) return;
+      hasAutoPlayed.current = true;
+      startPlayback().catch(() => {
+        // Silently fail if autoplay is blocked
+      });
+      document.removeEventListener("click", handleInteraction);
+      document.removeEventListener("touchstart", handleInteraction);
+      document.removeEventListener("keydown", handleInteraction);
+    };
+
+    document.addEventListener("click", handleInteraction, { once: true });
+    document.addEventListener("touchstart", handleInteraction, { once: true });
+    document.addEventListener("keydown", handleInteraction, { once: true });
+
+    return () => {
+      document.removeEventListener("click", handleInteraction);
+      document.removeEventListener("touchstart", handleInteraction);
+      document.removeEventListener("keydown", handleInteraction);
+    };
+  }, [hasAudio, startPlayback]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -97,7 +134,8 @@ export function AudioPlayer() {
           <div className="relative flex items-center gap-3 rounded-full border border-border-warm bg-charcoal/95 backdrop-blur-xl px-4 py-3 shadow-lg shadow-black/30">
             {/* Close button */}
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 if (isPlaying) togglePlay();
                 setIsVisible(false);
               }}

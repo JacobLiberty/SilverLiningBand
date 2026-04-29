@@ -42,17 +42,15 @@ export function Music() {
           <div className="relative overflow-hidden rounded-lg glow-amber">
             {/* Gradient border effect */}
             <div className="absolute -inset-px rounded-lg bg-gradient-to-br from-amber/30 via-transparent to-amber-glow/20" />
-            <div className="relative m-px overflow-hidden rounded-lg bg-charcoal">
-              <div className="aspect-video">
-                <video
-                  controls
-                  poster="/images/band/gallery-band-remic.jpg"
-                  className="h-full w-full"
-                >
-                  <source src="/video/featured.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
+            <div className="relative m-px overflow-hidden rounded-lg bg-charcoal flex items-center justify-center">
+              <video
+                controls
+                poster="/images/band/gallery-band-remic.jpg"
+                className="max-h-[70vh] w-full rounded-lg object-contain"
+              >
+                <source src="/video/featured.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
         </motion.div>

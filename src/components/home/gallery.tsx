@@ -128,7 +128,7 @@ export function Gallery({ images }: GalleryProps) {
           className="grid gap-2 md:gap-3"
           style={{
             gridTemplateColumns: "repeat(3, 1fr)",
-            gridTemplateRows: "repeat(3, 200px)",
+            gridTemplateRows: "repeat(3, 260px)",
           }}
         >
           {displayImages.slice(0, 6).map((item, i) => {

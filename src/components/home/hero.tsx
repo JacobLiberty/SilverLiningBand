@@ -36,6 +36,21 @@ export function Hero({ bandName, tagline }: HeroProps) {
     };
   }, []);
 
+  // Loop video back to start at 40s (before logo splash screen)
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleTimeUpdate = () => {
+      if (video.currentTime >= 40) {
+        video.currentTime = 0;
+      }
+    };
+
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    return () => video.removeEventListener("timeupdate", handleTimeUpdate);
+  }, []);
+
   // Mute when hero scrolls out of view, unmute when back
   useEffect(() => {
     const section = sectionRef.current;

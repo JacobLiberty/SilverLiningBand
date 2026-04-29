@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -60,14 +61,14 @@ export function Navbar() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
           {/* Logo */}
           <Link href="/" className="group flex items-center gap-3">
-            <div className="relative">
-              <span className="font-display text-xl font-semibold tracking-[0.2em] text-cream uppercase">
-                Silver Lining
-              </span>
-              <span className="block text-[0.6rem] tracking-[0.4em] text-amber uppercase font-body font-light">
-                Band
-              </span>
-            </div>
+            <Image
+              src="/images/band/logo.png"
+              alt="Silver Lining Band"
+              width={140}
+              height={50}
+              className="h-10 w-auto brightness-0 invert opacity-90 transition-opacity group-hover:opacity-100"
+              priority
+            />
           </Link>
 
           {/* Desktop nav */}

@@ -42,6 +42,9 @@ yarn-error.log*
 # Superpowers
 .superpowers/
 
+# Raw source media (originals — optimized copies are in public/images/band/)
+public/images/Silver Lining Website/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

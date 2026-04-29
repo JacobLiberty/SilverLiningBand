@@ -1,7 +1,8 @@
 "use client";
 
+import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 interface HeroProps {
@@ -10,10 +11,89 @@ interface HeroProps {
 }
 
 export function Hero({ bandName, tagline }: HeroProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [hasUnmuted, setHasUnmuted] = useState(false);
+
+  // Unmute on first user interaction anywhere on the page
+  useEffect(() => {
+    const handleInteraction = () => {
+      if (videoRef.current && !hasUnmuted) {
+        videoRef.current.muted = false;
+        videoRef.current.volume = 0.4;
+        setIsMuted(false);
+        setHasUnmuted(true);
+      }
+    };
+
+    document.addEventListener("click", handleInteraction, { once: true });
+    document.addEventListener("touchstart", handleInteraction, { once: true });
+
+    return () => {
+      document.removeEventListener("click", handleInteraction);
+      document.removeEventListener("touchstart", handleInteraction);
+    };
+  }, [hasUnmuted]);
+
+  // Pause/mute when hero scrolls out of view, resume when back
+  useEffect(() => {
+    const section = sectionRef.current;
+    const video = videoRef.current;
+    if (!section || !video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+          if (hasUnmuted) {
+            video.muted = false;
+            setIsMuted(false);
+          }
+          setIsPlaying(true);
+        } else {
+          video.muted = true;
+          setIsMuted(true);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [hasUnmuted]);
+
+  const toggleMute = useCallback(() => {
+    if (!videoRef.current) return;
+    const newMuted = !videoRef.current.muted;
+    videoRef.current.muted = newMuted;
+    if (!newMuted) {
+      videoRef.current.volume = 0.4;
+      setHasUnmuted(true);
+    }
+    setIsMuted(newMuted);
+  }, []);
+
+  const togglePlay = useCallback(() => {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current.play().catch(() => {});
+      setIsPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex items-end overflow-hidden bg-midnight">
-      {/* Background video — muted, looping */}
+    <section
+      ref={sectionRef}
+      className="relative min-h-screen flex items-end overflow-hidden bg-midnight"
+    >
+      {/* Background video — starts muted, unmutes on first interaction */}
       <video
+        ref={videoRef}
         autoPlay
         muted
         loop
@@ -24,7 +104,7 @@ export function Hero({ bandName, tagline }: HeroProps) {
         <source src="/video/featured.mp4" type="video/mp4" />
       </video>
 
-      {/* Overlays for text readability */}
+      {/* Overlays */}
       <div className="absolute inset-0 bg-midnight/60 z-[1]" />
       <div className="absolute inset-0 bg-linear-to-t from-midnight via-midnight/50 to-midnight/30 z-[1]" />
       <div className="absolute inset-0 bg-linear-to-r from-midnight/70 via-midnight/20 to-transparent z-[1]" />
@@ -105,7 +185,69 @@ export function Hero({ bandName, tagline }: HeroProps) {
         </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Video controls — bottom right */}
+      <motion.div
+        className="absolute bottom-6 right-6 z-10 flex items-center gap-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+      >
+        {/* Play/Pause */}
+        <button
+          onClick={togglePlay}
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-cream/20 bg-midnight/50 backdrop-blur-sm text-cream/70 transition-all duration-200 hover:border-amber/40 hover:text-cream"
+          aria-label={isPlaying ? "Pause video" : "Play video"}
+        >
+          {isPlaying ? (
+            <svg className="h-3.5 w-3.5" viewBox="0 0 12 14" fill="currentColor">
+              <rect x="1" y="0" width="3" height="14" rx="1" />
+              <rect x="8" y="0" width="3" height="14" rx="1" />
+            </svg>
+          ) : (
+            <svg className="h-3.5 w-3.5 ml-0.5" viewBox="0 0 12 14" fill="currentColor">
+              <path d="M0 0L12 7L0 14V0Z" />
+            </svg>
+          )}
+        </button>
+
+        {/* Mute/Unmute */}
+        <button
+          onClick={toggleMute}
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-cream/20 bg-midnight/50 backdrop-blur-sm text-cream/70 transition-all duration-200 hover:border-amber/40 hover:text-cream"
+          aria-label={isMuted ? "Unmute" : "Mute"}
+        >
+          {isMuted ? (
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+              <line x1="23" x2="17" y1="9" y2="15" />
+              <line x1="17" x2="23" y1="9" y2="15" />
+            </svg>
+          ) : (
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+            </svg>
+          )}
+        </button>
+
+        {/* "Unmute" hint — shows briefly when muted */}
+        <AnimatePresence>
+          {isMuted && !hasUnmuted && (
+            <motion.span
+              className="text-[10px] font-body tracking-wider uppercase text-cream/50"
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 2 }}
+            >
+              Click to unmute
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Scroll indicator — bottom center */}
       <motion.div
         className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0 }}

@@ -27,7 +27,6 @@ export default async function HomePage() {
       <Hero
         bandName={settings?.bandName || "Silver Lining Band"}
         tagline={settings?.tagline || "Classic rock covers from the golden era — Fleetwood Mac, Eagles, Beatles & more"}
-        heroImage={settings?.heroImage}
       />
       <About bio={settings?.bio} />
       <UpcomingShows shows={shows || []} />

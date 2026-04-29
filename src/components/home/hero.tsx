@@ -1,104 +1,37 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { urlFor } from "@/lib/sanity/image";
-import type { SanityImageSource } from "@sanity/image-url";
 
 interface HeroProps {
   bandName: string;
   tagline: string;
-  heroImage?: SanityImageSource;
 }
 
-const SLIDE_DURATION = 6000; // ms per slide
-
-const slides = [
-  { src: "/images/band/hero-group.jpg", alt: "Silver Lining Band" },
-  { src: "/images/band/nancy-bw.jpg", alt: "Nancy performing" },
-  { src: "/images/band/gallery-remic-group.jpg", alt: "Live at Remic Rapids" },
-  { src: "/images/band/greg-bw.jpg", alt: "Greg on guitar" },
-  { src: "/images/band/gallery-remic-night.jpg", alt: "Night performance" },
-  { src: "/images/band/dom-bw.jpg", alt: "Dom on guitar" },
-  { src: "/images/band/steve-bw.jpg", alt: "Steve at the mic" },
-];
-
-/** Ken Burns — alternate between zoom-in and zoom-out with subtle drift */
-const kenBurnsVariants = [
-  { scale: [1, 1.08], x: [0, -15], y: [0, -10] },
-  { scale: [1.06, 1], x: [-10, 10], y: [-5, 5] },
-  { scale: [1, 1.06], x: [0, 12], y: [0, -8] },
-  { scale: [1.05, 1], x: [8, -8], y: [-8, 0] },
-];
-
-export function Hero({ bandName, tagline, heroImage }: HeroProps) {
-  const [current, setCurrent] = useState(0);
-
-  // Override first slide with Sanity hero image if available
-  const allSlides = heroImage
-    ? [
-        { src: urlFor(heroImage).width(1920).quality(80).url(), alt: "Silver Lining Band" },
-        ...slides.slice(1),
-      ]
-    : slides;
-
-  const advance = useCallback(() => {
-    setCurrent((prev) => (prev + 1) % allSlides.length);
-  }, [allSlides.length]);
-
-  useEffect(() => {
-    const timer = setInterval(advance, SLIDE_DURATION);
-    return () => clearInterval(timer);
-  }, [advance]);
-
-  const kenBurns = kenBurnsVariants[current % kenBurnsVariants.length];
-
+export function Hero({ bandName, tagline }: HeroProps) {
   return (
     <section className="relative min-h-screen flex items-end overflow-hidden bg-midnight">
-      {/* Background slideshow with crossfade + Ken Burns */}
-      <AnimatePresence mode="popLayout">
-        <motion.div
-          key={current}
-          className="absolute inset-0"
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: 1,
-            scale: kenBurns.scale,
-            x: kenBurns.x,
-            y: kenBurns.y,
-          }}
-          exit={{ opacity: 0 }}
-          transition={{
-            opacity: { duration: 1.5, ease: "easeInOut" },
-            scale: { duration: SLIDE_DURATION / 1000, ease: "linear" },
-            x: { duration: SLIDE_DURATION / 1000, ease: "linear" },
-            y: { duration: SLIDE_DURATION / 1000, ease: "linear" },
-          }}
-        >
-          <Image
-            src={allSlides[current].src}
-            alt={allSlides[current].alt}
-            fill
-            className="object-cover"
-            priority={current === 0}
-            sizes="100vw"
-          />
-          {/* Warm tint */}
-          <div className="absolute inset-0 bg-amber/[0.04] mix-blend-overlay" />
-        </motion.div>
-      </AnimatePresence>
+      {/* Background video — muted, looping */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        poster="/images/band/hero-group.jpg"
+        className="absolute inset-0 h-full w-full object-cover"
+      >
+        <source src="/video/featured.mp4" type="video/mp4" />
+      </video>
 
-      {/* Overlays */}
-      <div className="absolute inset-0 bg-midnight/50 z-[5]" />
-      <div className="absolute inset-0 bg-linear-to-t from-midnight via-midnight/50 to-midnight/20 z-[5]" />
-      <div className="absolute inset-0 bg-linear-to-r from-midnight/60 via-transparent to-transparent z-[5]" />
+      {/* Overlays for text readability */}
+      <div className="absolute inset-0 bg-midnight/60 z-[1]" />
+      <div className="absolute inset-0 bg-linear-to-t from-midnight via-midnight/50 to-midnight/30 z-[1]" />
+      <div className="absolute inset-0 bg-linear-to-r from-midnight/70 via-midnight/20 to-transparent z-[1]" />
 
       {/* Warm ambient glow */}
-      <div className="absolute bottom-0 left-1/4 w-[500px] h-[400px] bg-amber/[0.06] blur-[120px] rounded-full z-[5]" />
-      <div className="absolute top-1/3 right-0 w-[300px] h-[300px] bg-amber/[0.03] blur-[100px] rounded-full z-[5]" />
+      <div className="absolute bottom-0 left-1/4 w-[500px] h-[400px] bg-amber/[0.06] blur-[120px] rounded-full z-[2]" />
+      <div className="absolute top-1/3 right-0 w-[300px] h-[300px] bg-amber/[0.03] blur-[100px] rounded-full z-[2]" />
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pb-20 pt-40 lg:px-10 lg:pb-28">
@@ -172,21 +105,19 @@ export function Hero({ bandName, tagline, heroImage }: HeroProps) {
         </div>
       </div>
 
-      {/* Slide indicators */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2">
-        {allSlides.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrent(i)}
-            className={`h-[2px] rounded-full transition-all duration-500 ${
-              i === current
-                ? "w-8 bg-amber"
-                : "w-3 bg-cream/20 hover:bg-cream/40"
-            }`}
-            aria-label={`Go to slide ${i + 1}`}
-          />
-        ))}
-      </div>
+      {/* Scroll indicator */}
+      <motion.div
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+      >
+        <motion.div
+          className="w-[1px] h-12 bg-linear-to-b from-amber/60 to-transparent"
+          animate={{ scaleY: [1, 0.5, 1] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </motion.div>
     </section>
   );
 }

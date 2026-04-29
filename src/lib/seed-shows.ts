@@ -5,6 +5,7 @@ export interface Show {
   venue: string;
   address: string;
   city: string;
+  image?: string;
   description?: string;
 }
 
@@ -17,6 +18,7 @@ export const SEED_UPCOMING_SHOWS: Show[] = [
     venue: "Remic Rapids Park",
     address: "Remic Rapids, Sir John A. Macdonald Pkwy, Ottawa, ON",
     city: "Ottawa, ON",
+    image: "/images/band/gallery-remic-group.jpg",
     description: "Outdoor summer series by the river. Bring a lawn chair and enjoy classic rock as the sun sets over the rapids.",
   },
   {
@@ -26,6 +28,7 @@ export const SEED_UPCOMING_SHOWS: Show[] = [
     venue: "Sonny's Bar & Grill",
     address: "1374 Old Montreal Rd, Cumberland, ON K4C 1E3",
     city: "Cumberland, ON",
+    image: "/images/band/venue-sonnys.jpg",
     description: "Saturday night live music. Full setlist — Fleetwood Mac, Eagles, Beatles & more.",
   },
   {
@@ -35,6 +38,7 @@ export const SEED_UPCOMING_SHOWS: Show[] = [
     venue: "Broadhead Brewing Company",
     address: "73 Lorne Ave, Ottawa, ON K1S 0C2",
     city: "Ottawa, ON",
+    image: "/images/band/venue-broadhead.jpg",
     description: "Craft beer and classic rock — what more could you want? Patio session weather permitting.",
   },
   {
@@ -44,6 +48,7 @@ export const SEED_UPCOMING_SHOWS: Show[] = [
     venue: "No Go Cafe",
     address: "264 Dalhousie St, Ottawa, ON K1N 7E6",
     city: "Ottawa, ON",
+    image: "/images/band/gallery-no-go.jpg",
     description: "Intimate acoustic set in the heart of the ByWard Market. Limited seating — arrive early.",
   },
   {
@@ -53,6 +58,7 @@ export const SEED_UPCOMING_SHOWS: Show[] = [
     venue: "Remic Rapids Park",
     address: "Remic Rapids, Sir John A. Macdonald Pkwy, Ottawa, ON",
     city: "Ottawa, ON",
+    image: "/images/band/gallery-remic-night.jpg",
     description: "Back by popular demand. Golden hour classics by the Ottawa River.",
   },
 ];
@@ -65,6 +71,7 @@ export const SEED_PAST_SHOWS: Show[] = [
     venue: "The Homestead",
     address: "The Homestead, Ottawa, ON",
     city: "Ottawa, ON",
+    image: "/images/band/venue-homestead.jpg",
     description: "Great night with a packed house. Thanks to everyone who came out!",
   },
   {
@@ -74,5 +81,6 @@ export const SEED_PAST_SHOWS: Show[] = [
     venue: "Sonny's Bar & Grill",
     address: "1374 Old Montreal Rd, Cumberland, ON K4C 1E3",
     city: "Cumberland, ON",
+    image: "/images/band/venue-sonnys.jpg",
   },
 ];

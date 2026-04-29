@@ -11,6 +11,7 @@ interface Show {
   venue: string;
   address: string;
   city: string;
+  image?: string;
   description?: string;
 }
 

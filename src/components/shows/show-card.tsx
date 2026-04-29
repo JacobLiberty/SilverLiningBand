@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { buildGoogleCalendarUrl, buildGoogleMapsUrl } from "@/lib/calendar";
 
@@ -9,6 +10,7 @@ interface ShowCardProps {
   venue: string;
   address: string;
   city: string;
+  image?: string;
   description?: string;
 }
 
@@ -18,6 +20,7 @@ export function ShowCard({
   venue,
   address,
   city,
+  image,
   description,
 }: ShowCardProps) {
   const dateObj = new Date(date);
@@ -47,8 +50,24 @@ export function ShowCard({
       whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
     >
-      {/* Amber left accent border */}
-      <div className="w-1 shrink-0 bg-gradient-to-b from-amber via-amber-light to-amber-glow" />
+      {/* Venue image */}
+      {image && (
+        <div className="relative hidden w-32 shrink-0 sm:block lg:w-40">
+          <Image
+            src={image}
+            alt={venue}
+            fill
+            className="object-cover"
+            sizes="160px"
+          />
+          <div className="absolute inset-0 bg-linear-to-r from-transparent to-charcoal/60" />
+        </div>
+      )}
+
+      {/* Amber left accent (shown when no image, or on mobile) */}
+      {!image && (
+        <div className="w-1 shrink-0 bg-gradient-to-b from-amber via-amber-light to-amber-glow" />
+      )}
 
       <div className="flex flex-1 flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:gap-6 sm:px-6">
         {/* Editorial date block */}
@@ -64,7 +83,7 @@ export function ShowCard({
           </span>
         </div>
 
-        {/* Subtle vertical separator (desktop) */}
+        {/* Vertical separator (desktop) */}
         <div className="hidden h-12 w-px bg-border-cool sm:block" />
 
         {/* Event details */}
@@ -115,7 +134,7 @@ export function ShowCard({
           )}
         </div>
 
-        {/* Add to Calendar CTA */}
+        {/* Add to Calendar */}
         <a
           href={calendarUrl}
           target="_blank"

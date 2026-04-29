@@ -81,7 +81,7 @@ export function Music() {
                   controls
                   className="max-h-[70vh] w-full rounded-lg object-contain"
                 >
-                  <source src="/video/hurricane.mp4" type="video/mp4" />
+                  <source src="/video/fishermans-blues.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>

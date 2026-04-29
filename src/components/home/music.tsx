@@ -81,7 +81,7 @@ export function Music() {
                   controls
                   className="max-h-[70vh] w-full rounded-lg object-contain"
                 >
-                  <source src="/video/the-longest-time.mp4" type="video/mp4" />
+                  <source src="/video/hurricane.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>

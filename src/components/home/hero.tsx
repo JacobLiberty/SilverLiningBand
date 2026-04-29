@@ -85,7 +85,6 @@ export function Hero({ bandName, tagline }: HeroProps) {
         muted
         loop
         playsInline
-        poster="/images/band/hero-group.jpg"
         className="absolute inset-0 h-full w-full object-cover"
       >
         <source src="/video/featured.mp4" type="video/mp4" />

@@ -45,10 +45,9 @@ export function Music() {
             <div className="relative m-px overflow-hidden rounded-lg bg-charcoal flex items-center justify-center">
               <video
                 controls
-                poster="/images/band/gallery-band-remic.jpg"
                 className="max-h-[70vh] w-full rounded-lg object-contain"
               >
-                <source src="/video/cant-let-go.mp4" type="video/mp4" />
+                <source src="/video/blue-bayou.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>

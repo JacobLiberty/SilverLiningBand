@@ -57,14 +57,14 @@ function getCaption(item: DisplayImage): string {
   return item.caption ?? "Band photo";
 }
 
-/** Bento grid — explicit row/col placement to prevent overlap */
+/** Bento grid — 3x3 square layout, no empty cells */
 const BENTO_CLASSES = [
-  "col-start-1 col-end-3 row-start-1 row-end-3",   // 0 — hero, 2x2
+  "col-start-1 col-end-3 row-start-1 row-end-3",   // 0 — large 2x2
   "col-start-3 col-end-4 row-start-1 row-end-2",    // 1 — top right
   "col-start-3 col-end-4 row-start-2 row-end-3",    // 2 — mid right
-  "col-start-1 col-end-2 row-start-3 row-end-5",    // 3 — tall left
-  "col-start-2 col-end-3 row-start-3 row-end-4",    // 4 — mid
-  "col-start-3 col-end-4 row-start-3 row-end-4",    // 5 — right
+  "col-start-1 col-end-2 row-start-3 row-end-4",    // 3 — bottom left
+  "col-start-2 col-end-3 row-start-3 row-end-4",    // 4 — bottom mid
+  "col-start-3 col-end-4 row-start-3 row-end-4",    // 5 — bottom right
 ] as const;
 
 const itemVariants = {
@@ -128,7 +128,7 @@ export function Gallery({ images }: GalleryProps) {
           className="grid gap-2 md:gap-3"
           style={{
             gridTemplateColumns: "repeat(3, 1fr)",
-            gridTemplateRows: "repeat(4, 180px)",
+            gridTemplateRows: "repeat(3, 200px)",
           }}
         >
           {displayImages.slice(0, 6).map((item, i) => {

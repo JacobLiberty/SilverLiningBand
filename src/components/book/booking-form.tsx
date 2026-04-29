@@ -9,7 +9,9 @@ import { Label } from "@/components/ui/label";
 import { submitBooking } from "@/app/actions/booking";
 
 export function BookingForm() {
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "success" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -40,95 +42,137 @@ export function BookingForm() {
   if (status === "success") {
     return (
       <motion.div
-        className="rounded-lg border border-border-accent bg-surface-raised p-8 text-center"
+        className="rounded-lg border border-amber/20 bg-smoke/80 p-10 text-center"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
       >
-        <h3 className="text-xl text-silver-light">Thanks for reaching out!</h3>
-        <p className="mt-2 text-muted">
-          We&apos;ll get back to you as soon as possible.
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-amber/30 bg-amber/10">
+          <span className="text-xl text-amber">&#10003;</span>
+        </div>
+        <h3 className="font-display text-2xl italic text-cream">
+          Thank You
+        </h3>
+        <p className="mt-3 font-body text-sm text-cream-dim">
+          We&apos;ve received your inquiry and will be in touch shortly.
         </p>
-        <Button
+        <button
           onClick={() => setStatus("idle")}
-          variant="outline"
-          className="mt-4 border-border-accent text-silver"
+          className="mt-6 rounded border border-amber/30 bg-amber/[0.08] px-5 py-2 font-body text-xs font-medium uppercase tracking-[0.15em] text-amber transition-all duration-200 hover:border-amber/50 hover:bg-amber/[0.15]"
         >
-          Send Another
-        </Button>
+          Send Another Inquiry
+        </button>
       </motion.div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <motion.form
+      onSubmit={handleSubmit}
+      className="space-y-6"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.1 }}
+    >
       <div>
-        <Label htmlFor="name" className="text-silver-light">Name</Label>
+        <Label
+          htmlFor="name"
+          className="font-body text-xs font-medium uppercase tracking-[0.15em] text-silver"
+        >
+          Name
+        </Label>
         <Input
           id="name"
           name="name"
           required
           placeholder="Your name"
-          className="mt-1 border-border-subtle bg-surface-raised text-white placeholder:text-muted"
+          className="mt-2 h-10 border-border-cool bg-smoke/80 text-cream placeholder:text-silver-dim focus-visible:border-amber/40 focus-visible:ring-amber/20"
         />
       </div>
 
       <div>
-        <Label htmlFor="email" className="text-silver-light">Email</Label>
+        <Label
+          htmlFor="email"
+          className="font-body text-xs font-medium uppercase tracking-[0.15em] text-silver"
+        >
+          Email
+        </Label>
         <Input
           id="email"
           name="email"
           type="email"
           required
           placeholder="your@email.com"
-          className="mt-1 border-border-subtle bg-surface-raised text-white placeholder:text-muted"
+          className="mt-2 h-10 border-border-cool bg-smoke/80 text-cream placeholder:text-silver-dim focus-visible:border-amber/40 focus-visible:ring-amber/20"
         />
       </div>
 
       <div>
-        <Label htmlFor="eventType" className="text-silver-light">Event Type</Label>
+        <Label
+          htmlFor="eventType"
+          className="font-body text-xs font-medium uppercase tracking-[0.15em] text-silver"
+        >
+          Event Type
+        </Label>
         <Input
           id="eventType"
           name="eventType"
           required
           placeholder="Wedding, Corporate, Festival, Private Party..."
-          className="mt-1 border-border-subtle bg-surface-raised text-white placeholder:text-muted"
+          className="mt-2 h-10 border-border-cool bg-smoke/80 text-cream placeholder:text-silver-dim focus-visible:border-amber/40 focus-visible:ring-amber/20"
         />
       </div>
 
       <div>
-        <Label htmlFor="date" className="text-silver-light">Preferred Date</Label>
+        <Label
+          htmlFor="date"
+          className="font-body text-xs font-medium uppercase tracking-[0.15em] text-silver"
+        >
+          Preferred Date
+        </Label>
         <Input
           id="date"
           name="date"
           type="date"
           required
-          className="mt-1 border-border-subtle bg-surface-raised text-white placeholder:text-muted"
+          className="mt-2 h-10 border-border-cool bg-smoke/80 text-cream placeholder:text-silver-dim focus-visible:border-amber/40 focus-visible:ring-amber/20"
         />
       </div>
 
       <div>
-        <Label htmlFor="message" className="text-silver-light">Tell us about your event</Label>
+        <Label
+          htmlFor="message"
+          className="font-body text-xs font-medium uppercase tracking-[0.15em] text-silver"
+        >
+          Tell Us About Your Event
+        </Label>
         <Textarea
           id="message"
           name="message"
           required
           rows={4}
           placeholder="Venue, expected guests, any special requests..."
-          className="mt-1 border-border-subtle bg-surface-raised text-white placeholder:text-muted"
+          className="mt-2 border-border-cool bg-smoke/80 text-cream placeholder:text-silver-dim focus-visible:border-amber/40 focus-visible:ring-amber/20"
         />
       </div>
 
       {status === "error" && (
-        <p className="text-sm text-red-400">{errorMessage}</p>
+        <motion.p
+          className="rounded border border-red-500/20 bg-red-500/10 px-3 py-2 font-body text-sm text-red-400"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          {errorMessage}
+        </motion.p>
       )}
 
       <Button
         type="submit"
         disabled={status === "sending"}
-        className="w-full bg-silver text-surface hover:bg-silver-light"
+        className="glow-amber-sm w-full bg-amber py-2.5 font-body text-xs font-semibold uppercase tracking-[0.2em] text-midnight transition-all duration-200 hover:bg-amber-light disabled:opacity-50"
       >
         {status === "sending" ? "Sending..." : "Send Inquiry"}
       </Button>
-    </form>
+    </motion.form>
   );
 }

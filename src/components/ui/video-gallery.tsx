@@ -18,10 +18,21 @@ export function VideoGallery({ videos }: VideoGalleryProps) {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const handleMouseEnter = useCallback((index: number) => {
+    // Mute all other videos first
+    videoRefs.current.forEach((v, i) => {
+      if (v && i !== index) {
+        v.pause();
+        v.muted = true;
+        v.currentTime = 0;
+      }
+    });
+
     setActiveIndex(index);
     const video = videoRefs.current[index];
     if (video) {
       video.currentTime = 0;
+      video.muted = false;
+      video.volume = 0.5;
       video.play().catch(() => {});
     }
   }, []);
@@ -31,6 +42,7 @@ export function VideoGallery({ videos }: VideoGalleryProps) {
     const video = videoRefs.current[index];
     if (video) {
       video.pause();
+      video.muted = true;
       video.currentTime = 0;
     }
   }, []);

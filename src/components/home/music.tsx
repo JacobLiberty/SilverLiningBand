@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { StaggerReveal } from "@/components/ui/stagger-reveal";
 
 interface MusicProps {
   featuredVideoUrl?: string;
@@ -24,36 +25,26 @@ export function Music({ featuredVideoUrl }: MusicProps) {
       <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[800px] rounded-full bg-amber/3 blur-[180px]" />
 
       <div className="relative mx-auto max-w-4xl">
-        {/* Section header */}
-        <motion.p
-          className="text-center font-body text-xs font-medium uppercase tracking-[0.35em] text-amber"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          Listen
-        </motion.p>
+        {/* Section header — staggered */}
+        <StaggerReveal className="text-center" stagger={0.1}>
+          <StaggerReveal.Item>
+            <p className="font-body text-xs font-medium uppercase tracking-[0.35em] text-amber">
+              Listen
+            </p>
+          </StaggerReveal.Item>
 
-        <motion.h2
-          className="mt-3 text-center font-display text-4xl italic text-cream md:text-5xl"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          Hear Us <span className="text-gradient-amber">Play</span>
-        </motion.h2>
+          <StaggerReveal.Item>
+            <h2 className="mt-3 font-display text-4xl italic text-cream md:text-5xl">
+              Hear Us <span className="text-gradient-amber">Play</span>
+            </h2>
+          </StaggerReveal.Item>
 
-        <motion.div
-          className="divider-ornament mx-auto mt-5 mb-12 max-w-xs text-amber/40"
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <span className="text-amber text-sm">&#9835;</span>
-        </motion.div>
+          <StaggerReveal.Item>
+            <div className="divider-ornament mx-auto mt-5 mb-12 max-w-xs text-amber/40">
+              <span className="text-amber text-sm">&#9835;</span>
+            </div>
+          </StaggerReveal.Item>
+        </StaggerReveal>
 
         {/* Video container — cinematic frame */}
         <motion.div

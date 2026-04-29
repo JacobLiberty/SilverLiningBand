@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bodoni_Moda, Josefin_Sans } from "next/font/google";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { AudioPlayer } from "@/components/layout/audio-player";
 import { client, isSanityConfigured } from "@/lib/sanity/client";
 import { siteSettingsQuery } from "@/lib/sanity/queries";
 import "./globals.css";
@@ -42,6 +43,7 @@ export default async function RootLayout({
         <Navbar />
         <main>{children}</main>
         <Footer socialLinks={settings?.socialLinks} />
+        <AudioPlayer />
       </body>
     </html>
   );

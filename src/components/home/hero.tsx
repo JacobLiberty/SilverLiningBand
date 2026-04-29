@@ -13,38 +13,108 @@ interface HeroProps {
   heroImage?: SanityImageSource;
 }
 
+/** Collage images — each with position, size, rotation, and drift animation */
+const collageImages = [
+  {
+    src: "/images/hero-band.jpg",
+    alt: "Band performing live",
+    className: "absolute top-[8%] right-[5%] w-[55%] sm:w-[45%] aspect-[4/3] z-[3]",
+    rotate: 3,
+    drift: { x: [0, 8, 0], y: [0, -6, 0] },
+    duration: 18,
+  },
+  {
+    src: "/images/gallery-1.jpg",
+    alt: "Concert atmosphere",
+    className: "absolute top-[25%] left-[2%] w-[40%] sm:w-[32%] aspect-[3/4] z-[2]",
+    rotate: -4,
+    drift: { x: [0, -5, 0], y: [0, 8, 0] },
+    duration: 22,
+  },
+  {
+    src: "/images/gallery-5.jpg",
+    alt: "Stage lights",
+    className: "absolute bottom-[15%] right-[8%] w-[38%] sm:w-[30%] aspect-square z-[1]",
+    rotate: 5,
+    drift: { x: [0, 6, 0], y: [0, 5, 0] },
+    duration: 20,
+  },
+  {
+    src: "/images/gallery-3.jpg",
+    alt: "Live music",
+    className: "absolute bottom-[22%] left-[15%] w-[30%] sm:w-[24%] aspect-[4/5] z-[4]",
+    rotate: -2,
+    drift: { x: [0, -4, 0], y: [0, -7, 0] },
+    duration: 24,
+  },
+];
+
 export function Hero({ bandName, tagline, heroImage }: HeroProps) {
-  const imageUrl = heroImage
-    ? urlFor(heroImage).width(1920).quality(80).url()
-    : "/images/hero-band.jpg";
+  // If Sanity provides a hero image, use it as the primary collage image
+  if (heroImage) {
+    collageImages[0] = {
+      ...collageImages[0],
+      src: urlFor(heroImage).width(1200).quality(80).url(),
+    };
+  }
 
   return (
-    <section className="relative min-h-screen flex items-end overflow-hidden">
-      {/* Background image with parallax feel */}
-      <motion.div
-        className="absolute inset-0"
-        initial={{ scale: 1.1 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <Image
-          src={imageUrl}
-          alt={bandName}
-          fill
-          className="object-cover object-center"
-          priority
-          sizes="100vw"
-        />
-      </motion.div>
+    <section className="relative min-h-screen flex items-end overflow-hidden bg-midnight">
+      {/* Collage images — slowly drifting */}
+      {collageImages.map((img, i) => (
+        <motion.div
+          key={img.src}
+          className={img.className}
+          initial={{ opacity: 0, scale: 0.9, rotate: img.rotate }}
+          animate={{
+            opacity: [0, 1],
+            scale: [0.9, 1],
+            x: img.drift.x,
+            y: img.drift.y,
+          }}
+          transition={{
+            opacity: { duration: 1.2, delay: 0.3 + i * 0.2 },
+            scale: { duration: 1.2, delay: 0.3 + i * 0.2 },
+            x: {
+              duration: img.duration,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.5,
+            },
+            y: {
+              duration: img.duration,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.5,
+            },
+          }}
+          style={{ rotate: img.rotate }}
+        >
+          <div className="relative w-full h-full overflow-hidden rounded-sm shadow-2xl shadow-black/40">
+            <Image
+              src={img.src}
+              alt={img.alt}
+              fill
+              className="object-cover"
+              priority={i === 0}
+              sizes={i === 0 ? "(max-width: 768px) 55vw, 45vw" : "(max-width: 768px) 40vw, 30vw"}
+            />
+            {/* Subtle warm tint on each image */}
+            <div className="absolute inset-0 bg-amber/[0.06] mix-blend-overlay" />
+          </div>
+          {/* Drop shadow / border effect */}
+          <div className="absolute inset-0 rounded-sm border border-cream/[0.08]" />
+        </motion.div>
+      ))}
 
-      {/* Multi-layer overlay for depth */}
-      <div className="absolute inset-0 bg-midnight/40" />
-      <div className="absolute inset-0 bg-linear-to-t from-midnight via-midnight/60 to-transparent" />
-      <div className="absolute inset-0 bg-linear-to-r from-midnight/30 to-transparent" />
+      {/* Dark vignette overlay */}
+      <div className="absolute inset-0 bg-midnight/50 z-[5]" />
+      <div className="absolute inset-0 bg-linear-to-t from-midnight via-midnight/40 to-midnight/20 z-[5]" />
+      <div className="absolute inset-0 bg-linear-to-r from-midnight/70 via-transparent to-transparent z-[5]" />
 
-      {/* Warm ambient glow — simulates bar lighting */}
-      <div className="absolute bottom-0 left-1/4 w-[500px] h-[400px] bg-amber/[0.08] blur-[120px] rounded-full" />
-      <div className="absolute top-1/3 right-0 w-[300px] h-[300px] bg-amber/[0.04] blur-[100px] rounded-full" />
+      {/* Warm ambient glow — bar lighting */}
+      <div className="absolute bottom-0 left-1/4 w-[500px] h-[400px] bg-amber/[0.06] blur-[120px] rounded-full z-[5]" />
+      <div className="absolute top-1/3 right-0 w-[300px] h-[300px] bg-amber/[0.03] blur-[100px] rounded-full z-[5]" />
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pb-20 pt-40 lg:px-10 lg:pb-28">
@@ -56,20 +126,22 @@ export function Hero({ bandName, tagline, heroImage }: HeroProps) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <span className="inline-flex items-center gap-3 text-xs font-body font-light tracking-[0.3em] uppercase text-amber">
+            <span className="inline-flex items-center gap-3 text-xs font-body font-normal tracking-[0.3em] uppercase text-amber">
               <span className="block w-8 h-[1px] bg-amber" />
               Live Classic Rock
             </span>
           </motion.div>
 
-          {/* Band name — editorial treatment */}
+          {/* Band name */}
           <motion.h1
             className="font-display font-bold text-cream tracking-wide"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="block text-5xl sm:text-7xl lg:text-8xl">Silver</span>
+            <span className="block text-5xl sm:text-7xl lg:text-8xl leading-none">
+              Silver
+            </span>
             <span className="block text-5xl sm:text-7xl lg:text-8xl italic text-gradient-amber leading-[1.15] pb-1">
               Lining
             </span>
@@ -107,7 +179,7 @@ export function Hero({ bandName, tagline, heroImage }: HeroProps) {
               <Button
                 variant="outline"
                 size="lg"
-                className="border-cream/20 text-cream hover:bg-cream/5 hover:border-cream/40 font-body font-light tracking-[0.1em] uppercase text-xs px-8 py-6 rounded-sm transition-all duration-300"
+                className="border-cream/20 text-cream hover:bg-cream/5 hover:border-cream/40 font-body font-normal tracking-[0.1em] uppercase text-xs px-8 py-6 rounded-sm transition-all duration-300"
               >
                 See Shows
               </Button>

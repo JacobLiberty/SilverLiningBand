@@ -60,19 +60,14 @@ export function Navbar() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
           {/* Logo */}
           <Link href="/" className="group flex items-center gap-3">
-            <div
-              className="h-20 w-auto aspect-[1217/763] bg-cream opacity-90 transition-opacity group-hover:opacity-100"
-              role="img"
-              aria-label="Silver Lining Band"
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/band/logo.png"
+              alt="Silver Lining Band"
+              className="h-16 w-auto opacity-90 transition-opacity group-hover:opacity-100"
               style={{
-                maskImage: "url(/images/band/logo.png)",
-                WebkitMaskImage: "url(/images/band/logo.png)",
-                maskSize: "contain",
-                WebkitMaskSize: "contain",
-                maskRepeat: "no-repeat",
-                WebkitMaskRepeat: "no-repeat",
-                maskPosition: "center",
-                WebkitMaskPosition: "center",
+                filter: "invert(1) brightness(2)",
+                mixBlendMode: "screen",
               }}
             />
           </Link>

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 interface HeroProps {
@@ -14,17 +14,16 @@ export function Hero({ bandName, tagline }: HeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const [isMuted, setIsMuted] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [hasUnmuted, setHasUnmuted] = useState(false);
+  const hasUnmutedRef = useRef(false);
 
-  // Unmute on first user interaction anywhere on the page
+  // Unmute on first user interaction (browser requires gesture for audio)
   useEffect(() => {
     const handleInteraction = () => {
-      if (videoRef.current && !hasUnmuted) {
+      if (videoRef.current && !hasUnmutedRef.current) {
         videoRef.current.muted = false;
         videoRef.current.volume = 0.4;
         setIsMuted(false);
-        setHasUnmuted(true);
+        hasUnmutedRef.current = true;
       }
     };
 
@@ -35,9 +34,9 @@ export function Hero({ bandName, tagline }: HeroProps) {
       document.removeEventListener("click", handleInteraction);
       document.removeEventListener("touchstart", handleInteraction);
     };
-  }, [hasUnmuted]);
+  }, []);
 
-  // Pause/mute when hero scrolls out of view, resume when back
+  // Mute when hero scrolls out of view, unmute when back
   useEffect(() => {
     const section = sectionRef.current;
     const video = videoRef.current;
@@ -47,11 +46,10 @@ export function Hero({ bandName, tagline }: HeroProps) {
       ([entry]) => {
         if (entry.isIntersecting) {
           video.play().catch(() => {});
-          if (hasUnmuted) {
+          if (hasUnmutedRef.current) {
             video.muted = false;
             setIsMuted(false);
           }
-          setIsPlaying(true);
         } else {
           video.muted = true;
           setIsMuted(true);
@@ -62,7 +60,7 @@ export function Hero({ bandName, tagline }: HeroProps) {
 
     observer.observe(section);
     return () => observer.disconnect();
-  }, [hasUnmuted]);
+  }, []);
 
   const toggleMute = useCallback(() => {
     if (!videoRef.current) return;
@@ -70,20 +68,9 @@ export function Hero({ bandName, tagline }: HeroProps) {
     videoRef.current.muted = newMuted;
     if (!newMuted) {
       videoRef.current.volume = 0.4;
-      setHasUnmuted(true);
+      hasUnmutedRef.current = true;
     }
     setIsMuted(newMuted);
-  }, []);
-
-  const togglePlay = useCallback(() => {
-    if (!videoRef.current) return;
-    if (videoRef.current.paused) {
-      videoRef.current.play().catch(() => {});
-      setIsPlaying(true);
-    } else {
-      videoRef.current.pause();
-      setIsPlaying(false);
-    }
   }, []);
 
   return (
@@ -185,32 +172,13 @@ export function Hero({ bandName, tagline }: HeroProps) {
         </div>
       </div>
 
-      {/* Video controls — bottom right */}
+      {/* Mute/Unmute control — bottom right */}
       <motion.div
-        className="absolute bottom-6 right-6 z-10 flex items-center gap-2"
+        className="absolute bottom-6 right-6 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
       >
-        {/* Play/Pause */}
-        <button
-          onClick={togglePlay}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-cream/20 bg-midnight/50 backdrop-blur-sm text-cream/70 transition-all duration-200 hover:border-amber/40 hover:text-cream"
-          aria-label={isPlaying ? "Pause video" : "Play video"}
-        >
-          {isPlaying ? (
-            <svg className="h-3.5 w-3.5" viewBox="0 0 12 14" fill="currentColor">
-              <rect x="1" y="0" width="3" height="14" rx="1" />
-              <rect x="8" y="0" width="3" height="14" rx="1" />
-            </svg>
-          ) : (
-            <svg className="h-3.5 w-3.5 ml-0.5" viewBox="0 0 12 14" fill="currentColor">
-              <path d="M0 0L12 7L0 14V0Z" />
-            </svg>
-          )}
-        </button>
-
-        {/* Mute/Unmute */}
         <button
           onClick={toggleMute}
           className="flex h-10 w-10 items-center justify-center rounded-full border border-cream/20 bg-midnight/50 backdrop-blur-sm text-cream/70 transition-all duration-200 hover:border-amber/40 hover:text-cream"
@@ -230,21 +198,6 @@ export function Hero({ bandName, tagline }: HeroProps) {
             </svg>
           )}
         </button>
-
-        {/* "Unmute" hint — shows briefly when muted */}
-        <AnimatePresence>
-          {isMuted && !hasUnmuted && (
-            <motion.span
-              className="text-[10px] font-body tracking-wider uppercase text-cream/50"
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ delay: 2 }}
-            >
-              Click to unmute
-            </motion.span>
-          )}
-        </AnimatePresence>
       </motion.div>
 
       {/* Scroll indicator — bottom center */}

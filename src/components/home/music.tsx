@@ -76,10 +76,10 @@ export function Music() {
           >
             <div className="relative overflow-hidden rounded-lg glow-amber">
               <div className="absolute -inset-px rounded-lg bg-gradient-to-br from-amber/30 via-transparent to-amber-glow/20" />
-              <div className="relative m-px overflow-hidden rounded-lg bg-charcoal flex items-center justify-center">
+              <div className="relative m-px overflow-hidden rounded-lg bg-charcoal">
                 <video
                   controls
-                  className="max-h-[70vh] w-full rounded-lg object-contain"
+                  className="w-full rounded-lg"
                 >
                   <source src="/video/fishermans-blues.mp4" type="video/mp4" />
                   Your browser does not support the video tag.

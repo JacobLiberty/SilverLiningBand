@@ -28,18 +28,18 @@ export function About({ bio }: AboutProps) {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="relative aspect-[3/4] overflow-hidden rounded-sm">
+            <div className="relative aspect-square overflow-hidden rounded-sm">
               <Image
-                src="/images/band/about-helen.jpg"
-                alt="Helen performing with Silver Lining Band"
+                src="/images/band/about-band.jpg"
+                alt="Silver Lining Band at golden hour, Remic Rapids"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 40vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-transparent" />
             </div>
-            {/* Decorative frame accent */}
-            <div className="absolute -bottom-4 -right-4 h-full w-full rounded-sm border border-amber/20 -z-10" />
+            {/* Decorative frame accent — always visible */}
+            <div className="absolute -bottom-4 -right-4 h-full w-full rounded-sm border border-amber/30 z-10 pointer-events-none" />
           </motion.div>
 
           {/* Text — staggered reveal */}

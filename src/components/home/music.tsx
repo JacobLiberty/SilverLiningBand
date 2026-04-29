@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { StaggerReveal } from "@/components/ui/stagger-reveal";
+import { VideoGallery } from "@/components/ui/video-gallery";
 
 function InstagramIcon({ className }: { className?: string }) {
   return (
@@ -36,14 +37,23 @@ const socials = [
   { icon: YoutubeIcon, label: "YouTube", href: "#" },
 ];
 
+const videos = [
+  { src: "/video/featured.mp4", title: "Be My Baby", venue: "Sonny's" },
+  { src: "/video/fishermans-blues.mp4", title: "Fishermans Blues", venue: "Remic Rapids" },
+  { src: "/video/cant-let-go.mp4", title: "Can't Let Go", venue: "Cumberland" },
+  { src: "/video/without-love.mp4", title: "Without Love", venue: "Sonny's" },
+  { src: "/video/the-longest-time.mp4", title: "The Longest Time", venue: "Live" },
+  { src: "/video/live-clip.mp4", title: "Live Session", venue: "On Stage" },
+];
+
 export function Music() {
   return (
     <section id="music" className="relative bg-midnight px-6 py-28 md:py-36 overflow-hidden">
-      {/* Cinematic ambient glows */}
+      {/* Ambient glows */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[800px] rounded-full bg-amber/3 blur-[180px]" />
 
-      <div className="relative mx-auto max-w-5xl">
-        {/* Section header — staggered */}
+      <div className="relative mx-auto max-w-6xl">
+        {/* Section header */}
         <StaggerReveal className="text-center" stagger={0.1}>
           <StaggerReveal.Item>
             <p className="font-body text-xs font-medium uppercase tracking-[0.35em] text-amber">
@@ -64,66 +74,51 @@ export function Music() {
           </StaggerReveal.Item>
         </StaggerReveal>
 
-        {/* Video + Socials side by side on desktop */}
-        <div className="grid gap-8 lg:grid-cols-[1fr_280px] lg:items-start">
-          {/* Video container — cinematic frame */}
-          <motion.div
-            className="relative"
-            initial={{ opacity: 0, y: 30, scale: 0.97 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-          >
-            <div className="relative overflow-hidden rounded-lg glow-amber">
-              <div className="absolute -inset-px rounded-lg bg-gradient-to-br from-amber/30 via-transparent to-amber-glow/20" />
-              <div className="relative m-px overflow-hidden rounded-lg bg-charcoal">
-                <video
-                  controls
-                  className="w-full rounded-lg"
-                >
-                  <source src="/video/fishermans-blues.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-            </div>
-          </motion.div>
+        {/* Video gallery — expand on hover */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+        >
+          <VideoGallery videos={videos} />
+        </motion.div>
 
-          {/* Social links panel */}
-          <motion.div
-            className="flex flex-col items-center lg:items-start lg:pt-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <h3 className="font-display text-2xl italic text-cream lg:text-3xl">
-              See More on{" "}
-              <span className="text-gradient-amber">Our Socials</span>
-            </h3>
-            <p className="mt-3 font-body text-sm text-cream-dim leading-relaxed text-center lg:text-left">
-              Follow us for live clips, behind-the-scenes moments, and show announcements.
-            </p>
+        {/* Social links below */}
+        <motion.div
+          className="mt-14 flex flex-col items-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <h3 className="font-display text-2xl italic text-cream md:text-3xl">
+            See More on{" "}
+            <span className="text-gradient-amber">Our Socials</span>
+          </h3>
+          <p className="mt-3 font-body text-sm text-cream-dim leading-relaxed text-center max-w-md">
+            Follow us for live clips, behind-the-scenes moments, and show announcements.
+          </p>
 
-            <div className="mt-6 flex gap-4">
-              {socials.map(({ icon: Icon, label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex flex-col items-center gap-2"
-                >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full border border-border-warm bg-charcoal/60 text-cream-dim transition-all duration-300 group-hover:border-amber group-hover:text-amber group-hover:glow-amber-sm">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <span className="font-body text-[10px] tracking-[0.15em] uppercase text-silver-dim group-hover:text-cream transition-colors">
-                    {label}
-                  </span>
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        </div>
+          <div className="mt-6 flex gap-5">
+            {socials.map(({ icon: Icon, label, href }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col items-center gap-2"
+              >
+                <span className="flex h-12 w-12 items-center justify-center rounded-full border border-border-warm bg-charcoal/60 text-cream-dim transition-all duration-300 group-hover:border-amber group-hover:text-amber group-hover:glow-amber-sm">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <span className="font-body text-[10px] tracking-[0.15em] uppercase text-silver-dim group-hover:text-cream transition-colors">
+                  {label}
+                </span>
+              </a>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );

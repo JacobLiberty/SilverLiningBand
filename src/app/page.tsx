@@ -30,7 +30,7 @@ export default async function HomePage() {
       />
       <About bio={settings?.bio} />
       <UpcomingShows shows={shows || []} />
-      <Music featuredVideoUrl={settings?.featuredVideoUrl} />
+      <Music />
       <Gallery images={gallery || []} />
     </>
   );

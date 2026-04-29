@@ -30,8 +30,8 @@ export function About({ bio }: AboutProps) {
           >
             <div className="relative aspect-[3/4] overflow-hidden rounded-sm">
               <Image
-                src="/images/about-band.jpg"
-                alt="Silver Lining Band"
+                src="/images/band/about-helen.jpg"
+                alt="Helen performing with Silver Lining Band"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 40vw"

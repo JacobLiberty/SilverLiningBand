@@ -3,22 +3,7 @@
 import { motion } from "framer-motion";
 import { StaggerReveal } from "@/components/ui/stagger-reveal";
 
-interface MusicProps {
-  featuredVideoUrl?: string;
-}
-
-function getYouTubeEmbedUrl(url: string): string | null {
-  const match = url.match(
-    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-  );
-  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
-}
-
-export function Music({ featuredVideoUrl }: MusicProps) {
-  const embedUrl = featuredVideoUrl
-    ? getYouTubeEmbedUrl(featuredVideoUrl)
-    : null;
-
+export function Music() {
   return (
     <section id="music" className="relative bg-midnight px-6 py-28 md:py-36 overflow-hidden">
       {/* Cinematic ambient glows */}
@@ -54,39 +39,22 @@ export function Music({ featuredVideoUrl }: MusicProps) {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
         >
-          {embedUrl ? (
-            <div className="relative overflow-hidden rounded-lg glow-amber">
-              {/* Gradient border effect */}
-              <div className="absolute -inset-px rounded-lg bg-gradient-to-br from-amber/30 via-transparent to-amber-glow/20" />
-              <div className="relative m-px overflow-hidden rounded-lg bg-charcoal">
-                <div className="aspect-video">
-                  <iframe
-                    src={embedUrl}
-                    title="Featured performance"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="h-full w-full"
-                  />
-                </div>
+          <div className="relative overflow-hidden rounded-lg glow-amber">
+            {/* Gradient border effect */}
+            <div className="absolute -inset-px rounded-lg bg-gradient-to-br from-amber/30 via-transparent to-amber-glow/20" />
+            <div className="relative m-px overflow-hidden rounded-lg bg-charcoal">
+              <div className="aspect-video">
+                <video
+                  controls
+                  poster="/images/band/gallery-band-remic.jpg"
+                  className="h-full w-full"
+                >
+                  <source src="/video/featured.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
             </div>
-          ) : (
-            /* Moody placeholder when no video */
-            <div className="relative overflow-hidden rounded-lg border border-border-warm bg-charcoal">
-              <div className="flex aspect-video flex-col items-center justify-center gap-4">
-                {/* Decorative music notes */}
-                <span className="text-5xl text-amber/20">&#9835;</span>
-                <p className="font-display text-2xl italic text-silver-dim md:text-3xl">
-                  Coming to your ears soon
-                </p>
-                <p className="text-sm text-cream-dim">
-                  We&apos;re preparing something special
-                </p>
-              </div>
-              {/* Ambient inner glow */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-amber/5 via-transparent to-transparent" />
-            </div>
-          )}
+          </div>
         </motion.div>
 
         {/* Footer text */}

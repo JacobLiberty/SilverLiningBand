@@ -26,12 +26,12 @@ interface GalleryProps {
 }
 
 const STOCK_IMAGES: readonly StockImageItem[] = [
-  { _id: "stock-1", src: "/images/gallery-1.jpg", caption: "Live performance" },
-  { _id: "stock-2", src: "/images/gallery-2.jpg", caption: "On stage" },
-  { _id: "stock-3", src: "/images/gallery-3.jpg", caption: "Sound check" },
-  { _id: "stock-4", src: "/images/gallery-4.jpg", caption: "Behind the scenes" },
-  { _id: "stock-5", src: "/images/gallery-5.jpg", caption: "In the studio" },
-  { _id: "stock-6", src: "/images/gallery-6.jpg", caption: "Band night" },
+  { _id: "stock-1", src: "/images/band/gallery-remic-group.jpg", caption: "Live at Remic Rapids" },
+  { _id: "stock-2", src: "/images/band/gallery-helen-bw.jpg", caption: "Helen at the mic" },
+  { _id: "stock-3", src: "/images/band/gallery-greg.jpg", caption: "Greg on guitar" },
+  { _id: "stock-4", src: "/images/band/gallery-remic-night.jpg", caption: "Night performance at Remic" },
+  { _id: "stock-5", src: "/images/band/gallery-nancy-helen.jpg", caption: "Nancy and Helen at Homestead" },
+  { _id: "stock-6", src: "/images/band/gallery-dom-remic.jpg", caption: "Dom at Remic Rapids" },
 ] as const;
 
 function isStockImage(item: DisplayImage): item is StockImageItem {

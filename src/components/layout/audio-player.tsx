@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const BAR_COUNT = 24;
-const AUDIO_SRC = "/audio/sample.mp3";
+const AUDIO_SRC = "/audio/sample.mp4";
 
 export function AudioPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);

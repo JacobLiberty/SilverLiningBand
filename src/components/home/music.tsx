@@ -32,9 +32,9 @@ function YoutubeIcon({ className }: { className?: string }) {
 }
 
 const socials = [
-  { icon: InstagramIcon, label: "Instagram", href: "#" },
-  { icon: FacebookIcon, label: "Facebook", href: "#" },
-  { icon: YoutubeIcon, label: "YouTube", href: "#" },
+  { icon: InstagramIcon, label: "Instagram", href: "https://www.instagram.com/therealsilverliningband/" },
+  { icon: FacebookIcon, label: "Facebook", href: "https://www.facebook.com/therealsilverliningband/" },
+  { icon: YoutubeIcon, label: "YouTube", href: "https://www.youtube.com/@SilverLining-Ottawa/featured" },
 ];
 
 const videos = [

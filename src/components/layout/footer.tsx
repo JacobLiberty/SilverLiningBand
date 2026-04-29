@@ -93,7 +93,12 @@ export function Footer({ socialLinks }: FooterProps) {
             </h4>
             <div className="flex gap-5 mb-6">
               {socialIcons.map(({ key, icon: Icon, label }) => {
-                const url = socialLinks?.[key] || "#";
+                const defaults: Record<string, string> = {
+                  instagram: "https://www.instagram.com/therealsilverliningband/",
+                  facebook: "https://www.facebook.com/therealsilverliningband/",
+                  youtube: "https://www.youtube.com/@SilverLining-Ottawa/featured",
+                };
+                const url = socialLinks?.[key] || defaults[key] || "#";
                 return (
                   <a
                     key={key}

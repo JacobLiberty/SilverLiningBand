@@ -4,6 +4,7 @@ import {
   upcomingShowsPreviewQuery,
   galleryImagesQuery,
 } from "@/lib/sanity/queries";
+import { SEED_UPCOMING_SHOWS } from "@/lib/seed-shows";
 import { Hero } from "@/components/home/hero";
 import { About } from "@/components/home/about";
 import { UpcomingShows } from "@/components/home/upcoming-shows";
@@ -19,7 +20,7 @@ export default async function HomePage() {
         client.fetch(upcomingShowsPreviewQuery).catch(() => []),
         client.fetch(galleryImagesQuery).catch(() => []),
       ])
-    : [null, [], []];
+    : [null, SEED_UPCOMING_SHOWS.slice(0, 3), []];
 
   return (
     <>

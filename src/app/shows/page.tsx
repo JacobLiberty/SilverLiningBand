@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { client, isSanityConfigured } from "@/lib/sanity/client";
 import { upcomingShowsQuery, pastShowsQuery } from "@/lib/sanity/queries";
 import { ShowList } from "@/components/shows/show-list";
+import { SEED_UPCOMING_SHOWS, SEED_PAST_SHOWS } from "@/lib/seed-shows";
 
 export const metadata: Metadata = {
   title: "Shows | Silver Lining Band",
@@ -16,7 +17,7 @@ export default async function ShowsPage() {
         client.fetch(upcomingShowsQuery).catch(() => []),
         client.fetch(pastShowsQuery).catch(() => []),
       ])
-    : [[], []];
+    : [SEED_UPCOMING_SHOWS, SEED_PAST_SHOWS];
 
   return (
     <div className="relative min-h-screen bg-midnight px-6 pt-28 pb-20">

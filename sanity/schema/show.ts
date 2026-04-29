@@ -24,15 +24,17 @@ export const show = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "address",
+      title: "Address",
+      type: "string",
+      description: "Full address — used for Google Maps link",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: "city",
       title: "City",
       type: "string",
       validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: "ticketUrl",
-      title: "Ticket / Info URL",
-      type: "url",
     }),
     defineField({
       name: "description",

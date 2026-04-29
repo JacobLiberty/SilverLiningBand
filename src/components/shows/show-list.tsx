@@ -9,8 +9,8 @@ interface Show {
   title: string;
   date: string;
   venue: string;
+  address: string;
   city: string;
-  ticketUrl?: string;
   description?: string;
 }
 

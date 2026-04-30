@@ -12,6 +12,7 @@ interface Show {
   address: string;
   city: string;
   image?: string;
+  imageUrl?: string;
   description?: string;
 }
 

@@ -8,9 +8,10 @@ import { Button } from "@/components/ui/button";
 interface HeroProps {
   bandName: string;
   tagline: string;
+  heroVideoUrl?: string;
 }
 
-export function Hero({ bandName, tagline }: HeroProps) {
+export function Hero({ bandName, tagline, heroVideoUrl }: HeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const [isMuted, setIsMuted] = useState(true);
@@ -102,7 +103,7 @@ export function Hero({ bandName, tagline }: HeroProps) {
         playsInline
         className="absolute inset-0 h-full w-full object-cover"
       >
-        <source src="/video/featured.mp4" type="video/mp4" />
+        <source src={heroVideoUrl || "/video/featured.mp4"} type="video/mp4" />
       </video>
 
       {/* Overlays */}

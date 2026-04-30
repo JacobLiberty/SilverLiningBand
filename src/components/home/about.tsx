@@ -8,11 +8,13 @@ import { StaggerReveal } from "@/components/ui/stagger-reveal";
 
 interface AboutProps {
   bio?: PortableTextBlock[];
+  aboutQuote?: string;
+  aboutImageUrl?: string;
 }
 
 const DEFAULT_BIO_TEXT = `We\u2019re a classic rock cover band bringing the golden era back to life \u2014 Fleetwood Mac, Eagles, Beatles, and more. Every show is a celebration of the music that defined a generation.`;
 
-export function About({ bio }: AboutProps) {
+export function About({ bio, aboutQuote, aboutImageUrl }: AboutProps) {
   return (
     <section id="about" className="relative bg-charcoal px-6 py-28 md:py-36 overflow-hidden">
       {/* Subtle ambient glow */}
@@ -30,7 +32,7 @@ export function About({ bio }: AboutProps) {
           >
             <div className="relative aspect-square overflow-hidden rounded-sm">
               <Image
-                src="/images/band/about-band.jpg"
+                src={aboutImageUrl || "/images/band/about-band.jpg"}
                 alt="Silver Lining Band at golden hour, Remic Rapids"
                 fill
                 className="object-cover"
@@ -66,7 +68,7 @@ export function About({ bio }: AboutProps) {
             <StaggerReveal.Item>
               <blockquote className="mb-8 border-l-2 border-amber/40 pl-5">
                 <p className="font-display text-xl italic leading-relaxed text-cream md:text-2xl">
-                  &ldquo;Music is the silver lining in every storm.&rdquo;
+                  &ldquo;{aboutQuote || "Music is the silver lining in every storm."}&rdquo;
                 </p>
               </blockquote>
             </StaggerReveal.Item>

@@ -4,6 +4,17 @@ import { motion } from "framer-motion";
 import { StaggerReveal } from "@/components/ui/stagger-reveal";
 import { VideoGallery } from "@/components/ui/video-gallery";
 
+interface SanityVideo {
+  _id: string;
+  title: string;
+  venue?: string;
+  videoUrl: string;
+}
+
+interface MusicProps {
+  videos: SanityVideo[];
+}
+
 function InstagramIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -37,7 +48,7 @@ const socials = [
   { icon: YoutubeIcon, label: "YouTube", href: "https://www.youtube.com/@SilverLining-Ottawa/featured" },
 ];
 
-const videos = [
+const LOCAL_VIDEOS = [
   { src: "/video/featured.mp4", title: "Be My Baby", venue: "Sonny's" },
   { src: "/video/fishermans-blues.mp4", title: "Fishermans Blues", venue: "Remic Rapids" },
   { src: "/video/cant-let-go.mp4", title: "Can't Let Go", venue: "Cumberland" },
@@ -46,7 +57,11 @@ const videos = [
   { src: "/video/live-clip.mp4", title: "Live Session", venue: "On Stage" },
 ];
 
-export function Music() {
+export function Music({ videos: sanityVideos }: MusicProps) {
+  const galleryVideos = sanityVideos.length > 0
+    ? sanityVideos.map((v) => ({ src: v.videoUrl, title: v.title, venue: v.venue }))
+    : LOCAL_VIDEOS;
+
   return (
     <section id="music" className="relative bg-midnight px-6 py-28 md:py-36 overflow-hidden">
       {/* Ambient glows */}
@@ -81,7 +96,7 @@ export function Music() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
         >
-          <VideoGallery videos={videos} />
+          <VideoGallery videos={galleryVideos} />
         </motion.div>
 
         {/* Social links below */}

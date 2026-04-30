@@ -11,6 +11,7 @@ interface ShowCardProps {
   address: string;
   city: string;
   image?: string;
+  imageUrl?: string;
   description?: string;
 }
 
@@ -21,8 +22,10 @@ export function ShowCard({
   address,
   city,
   image,
+  imageUrl,
   description,
 }: ShowCardProps) {
+  const showImage = imageUrl || image;
   const dateObj = new Date(date);
   const month = dateObj
     .toLocaleDateString("en-US", { month: "short" })
@@ -51,10 +54,10 @@ export function ShowCard({
       transition={{ duration: 0.2 }}
     >
       {/* Venue image */}
-      {image && (
+      {showImage && (
         <div className="relative hidden w-32 shrink-0 sm:block lg:w-40">
           <Image
-            src={image}
+            src={showImage}
             alt={venue}
             fill
             className="object-cover"
@@ -65,7 +68,7 @@ export function ShowCard({
       )}
 
       {/* Amber left accent (shown when no image, or on mobile) */}
-      {!image && (
+      {!showImage && (
         <div className="w-1 shrink-0 bg-gradient-to-b from-amber via-amber-light to-amber-glow" />
       )}
 

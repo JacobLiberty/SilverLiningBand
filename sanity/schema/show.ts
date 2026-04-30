@@ -37,6 +37,13 @@ export const show = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "image",
+      title: "Venue / Event Photo",
+      type: "image",
+      options: { hotspot: true },
+      description: "Shown on the show card — photo of the venue or a past event there",
+    }),
+    defineField({
       name: "description",
       title: "Description",
       type: "text",

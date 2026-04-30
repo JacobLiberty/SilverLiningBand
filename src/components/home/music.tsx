@@ -52,9 +52,6 @@ const LOCAL_VIDEOS = [
   { src: "/video/featured.mp4", title: "Be My Baby", venue: "Sonny's" },
   { src: "/video/fishermans-blues.mp4", title: "Fishermans Blues", venue: "Remic Rapids" },
   { src: "/video/cant-let-go.mp4", title: "Can't Let Go", venue: "Cumberland" },
-  { src: "/video/without-love.mp4", title: "Without Love", venue: "Sonny's" },
-  { src: "/video/the-longest-time.mp4", title: "The Longest Time", venue: "Live" },
-  { src: "/video/live-clip.mp4", title: "Live Session", venue: "On Stage" },
 ];
 
 export function Music({ videos: sanityVideos }: MusicProps) {

@@ -31,7 +31,6 @@ const STOCK_IMAGES: readonly StockImageItem[] = [
   { _id: "stock-3", src: "/images/band/gallery-greg.jpg", caption: "Greg on guitar" },
   { _id: "stock-4", src: "/images/band/gallery-remic-night.jpg", caption: "Night performance at Remic" },
   { _id: "stock-5", src: "/images/band/gallery-nancy-helen.jpg", caption: "Nancy and Helen at Homestead" },
-  { _id: "stock-6", src: "/images/band/gallery-dom-remic.jpg", caption: "Dom at Remic Rapids" },
 ];
 
 function isStockImage(item: DisplayImage): item is StockImageItem {

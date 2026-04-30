@@ -10,6 +10,7 @@ interface BookingFormData {
   eventType: string;
   date: string;
   message: string;
+  turnstileToken: string;
 }
 
 interface BookingResult {
@@ -17,8 +18,25 @@ interface BookingResult {
   error?: string;
 }
 
+async function verifyTurnstile(token: string): Promise<boolean> {
+  const secret = process.env.TURNSTILE_SECRET_KEY;
+  if (!secret) return true; // Skip verification if not configured
+
+  const response = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ secret, response: token }),
+    }
+  );
+
+  const data = await response.json();
+  return data.success === true;
+}
+
 export async function submitBooking(data: BookingFormData): Promise<BookingResult> {
-  const { name, email, eventType, date, message } = data;
+  const { name, email, eventType, date, message, turnstileToken } = data;
 
   if (!name || !email || !eventType || !date || !message) {
     return { success: false, error: "All fields are required." };
@@ -27,6 +45,11 @@ export async function submitBooking(data: BookingFormData): Promise<BookingResul
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return { success: false, error: "Please enter a valid email address." };
+  }
+
+  const isHuman = await verifyTurnstile(turnstileToken);
+  if (!isHuman) {
+    return { success: false, error: "Spam check failed. Please try again." };
   }
 
   try {
@@ -56,7 +79,7 @@ export async function submitBooking(data: BookingFormData): Promise<BookingResul
         `Thanks for reaching out! We received your inquiry about a ${eventType} on ${date}.`,
         `We'll get back to you as soon as possible.`,
         ``,
-        `— The Real Silver Lining Band`,
+        `— Silver Lining Band`,
       ].join("\n"),
     });
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Turnstile } from "@marsidev/react-turnstile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,6 +14,7 @@ export function BookingForm() {
     "idle" | "sending" | "success" | "error"
   >("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -28,7 +30,10 @@ export function BookingForm() {
       message: formData.get("message") as string,
     };
 
-    const result = await submitBooking(data);
+    const result = await submitBooking({
+      ...data,
+      turnstileToken,
+    });
 
     if (result.success) {
       setStatus("success");
@@ -164,6 +169,14 @@ export function BookingForm() {
         >
           {errorMessage}
         </motion.p>
+      )}
+
+      {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+        <Turnstile
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+          onSuccess={setTurnstileToken}
+          options={{ size: "invisible" }}
+        />
       )}
 
       <Button

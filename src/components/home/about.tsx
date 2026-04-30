@@ -53,7 +53,7 @@ export function About({ bio, aboutQuote, aboutImageUrl }: AboutProps) {
             </StaggerReveal.Item>
 
             <StaggerReveal.Item>
-              <h2 className="mt-4 font-display text-4xl italic leading-tight text-cream md:text-5xl lg:text-6xl">
+              <h2 className="mt-4 font-display text-3xl italic leading-[1.2] text-cream pb-1 md:text-4xl lg:text-5xl">
                 The Silver Lining{" "}
                 <span className="text-gradient-amber">Story</span>
               </h2>

@@ -16,7 +16,8 @@ interface BookingResult {
 
 async function verifyTurnstile(token: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return true;
+  if (!secret) return true; // Skip if not configured
+  if (!token) return true; // Skip if token not yet generated (widget still loading)
 
   const response = await fetch(
     "https://challenges.cloudflare.com/turnstile/v0/siteverify",

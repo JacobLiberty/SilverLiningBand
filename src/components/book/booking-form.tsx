@@ -140,6 +140,8 @@ export function BookingForm() {
           name="date"
           type="date"
           required
+          min={new Date().toISOString().split("T")[0]}
+          max="2099-12-31"
           className="mt-2 h-10 border-border-cool bg-smoke/80 text-cream placeholder:text-silver-dim focus-visible:border-amber/40 focus-visible:ring-amber/20"
         />
       </div>

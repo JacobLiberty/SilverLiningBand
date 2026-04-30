@@ -38,7 +38,7 @@ export const siteSettingsQuery = groq`
     tagline,
     bio,
     aboutQuote,
-    aboutImage,
+    "aboutImageUrl": aboutImage.asset->url,
     "heroVideoUrl": heroVideo.asset->url,
     contactEmail,
     socialLinks

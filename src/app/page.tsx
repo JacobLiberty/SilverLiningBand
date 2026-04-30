@@ -34,7 +34,7 @@ export default async function HomePage() {
       <About
         bio={settings?.bio}
         aboutQuote={settings?.aboutQuote}
-        aboutImageUrl={settings?.aboutImage?.asset?.url}
+        aboutImageUrl={settings?.aboutImageUrl}
       />
       <UpcomingShows shows={shows || []} />
       <Music videos={videos || []} />

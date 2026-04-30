@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { submitBooking } from "@/app/actions/booking";
+
+const WEB3FORMS_KEY = "c74a1e41-6c48-4510-878f-fdf48b0a6065";
 
 export function BookingForm() {
   const [status, setStatus] = useState<
@@ -22,25 +23,38 @@ export function BookingForm() {
     setErrorMessage("");
 
     const formData = new FormData(e.currentTarget);
-    const data = {
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      eventType: formData.get("eventType") as string,
-      date: formData.get("date") as string,
-      message: formData.get("message") as string,
-    };
 
-    const result = await submitBooking({
-      ...data,
-      turnstileToken,
-    });
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `Booking Inquiry: ${formData.get("eventType")} on ${formData.get("date")}`,
+          from_name: "Silver Lining Band Website",
+          name: formData.get("name"),
+          email: formData.get("email"),
+          event_type: formData.get("eventType"),
+          preferred_date: formData.get("date"),
+          message: formData.get("message"),
+        }),
+      });
 
-    if (result.success) {
-      setStatus("success");
-      (e.target as HTMLFormElement).reset();
-    } else {
+      const result = await response.json();
+
+      if (result.success) {
+        setStatus("success");
+        (e.target as HTMLFormElement).reset();
+      } else {
+        setStatus("error");
+        setErrorMessage(result.message || "Something went wrong. Please try again.");
+      }
+    } catch {
       setStatus("error");
-      setErrorMessage(result.error || "Something went wrong.");
+      setErrorMessage("Could not connect. Please try again or email us directly.");
     }
   }
 

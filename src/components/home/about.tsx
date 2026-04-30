@@ -30,12 +30,13 @@ export function About({ bio, aboutQuote, aboutImageUrl }: AboutProps) {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="relative aspect-square overflow-hidden rounded-sm">
+            <div className="relative overflow-hidden rounded-sm">
               <Image
                 src={aboutImageUrl || "/images/band/about-band.jpg"}
                 alt="Silver Lining Band at golden hour, Remic Rapids"
-                fill
-                className="object-cover"
+                width={800}
+                height={600}
+                className="w-full h-auto rounded-sm"
                 sizes="(max-width: 768px) 100vw, 40vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-transparent" />

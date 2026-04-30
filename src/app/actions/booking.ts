@@ -49,11 +49,6 @@ export async function submitBooking(data: BookingFormData): Promise<BookingResul
     return { success: false, error: "Spam check failed. Please try again." };
   }
 
-  const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
-  if (!accessKey) {
-    return { success: false, error: "Contact form is not configured yet. Please email us directly." };
-  }
-
   try {
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
@@ -62,7 +57,7 @@ export async function submitBooking(data: BookingFormData): Promise<BookingResul
         "Accept": "application/json",
       },
       body: JSON.stringify({
-        access_key: accessKey,
+        access_key: "c74a1e41-6c48-4510-878f-fdf48b0a6065",
         subject: `Booking Inquiry: ${eventType} on ${date}`,
         from_name: "Silver Lining Band Website",
         name,

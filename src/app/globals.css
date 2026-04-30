@@ -138,6 +138,19 @@
     @apply text-cream;
   }
 
+  /* Force light text in date/time inputs and select elements on dark backgrounds */
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"],
+  select {
+    color-scheme: dark;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #6B6B7B;
+  }
+
   h4, h5, h6 {
     @apply text-cream;
   }

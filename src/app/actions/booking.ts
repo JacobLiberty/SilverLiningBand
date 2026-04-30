@@ -57,7 +57,10 @@ export async function submitBooking(data: BookingFormData): Promise<BookingResul
   try {
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
       body: JSON.stringify({
         access_key: accessKey,
         subject: `Booking Inquiry: ${eventType} on ${date}`,
@@ -73,12 +76,13 @@ export async function submitBooking(data: BookingFormData): Promise<BookingResul
     const result = await response.json();
 
     if (!result.success) {
-      return { success: false, error: "Something went wrong. Please try again or email us directly." };
+      console.error("Web3Forms error:", result);
+      return { success: false, error: result.message || "Something went wrong. Please try again or email us directly." };
     }
 
     return { success: true };
   } catch (err) {
     console.error("Booking form submission failed:", err);
-    return { success: false, error: "Something went wrong. Please try again or email us directly." };
+    return { success: false, error: "Could not connect to the server. Please try again or email us directly." };
   }
 }

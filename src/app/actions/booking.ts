@@ -1,9 +1,5 @@
 "use server";
 
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 interface BookingFormData {
   name: string;
   email: string;
@@ -20,7 +16,7 @@ interface BookingResult {
 
 async function verifyTurnstile(token: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return true; // Skip verification if not configured
+  if (!secret) return true;
 
   const response = await fetch(
     "https://challenges.cloudflare.com/turnstile/v0/siteverify",
@@ -52,40 +48,36 @@ export async function submitBooking(data: BookingFormData): Promise<BookingResul
     return { success: false, error: "Spam check failed. Please try again." };
   }
 
+  const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
+  if (!accessKey) {
+    return { success: false, error: "Contact form is not configured yet. Please email us directly." };
+  }
+
   try {
-    await resend.emails.send({
-      from: "Silver Lining Band <booking@resend.dev>",
-      to: [process.env.BOOKING_EMAIL || "band@example.com"],
-      replyTo: email,
-      subject: `Booking Inquiry: ${eventType} on ${date}`,
-      text: [
-        `New booking inquiry from ${name}`,
-        `Email: ${email}`,
-        `Event Type: ${eventType}`,
-        `Date: ${date}`,
-        ``,
-        `Message:`,
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        access_key: accessKey,
+        subject: `Booking Inquiry: ${eventType} on ${date}`,
+        from_name: "Silver Lining Band Website",
+        name,
+        email,
+        event_type: eventType,
+        preferred_date: date,
         message,
-      ].join("\n"),
+      }),
     });
 
-    await resend.emails.send({
-      from: "Silver Lining Band <booking@resend.dev>",
-      to: [email],
-      subject: "We got your booking inquiry!",
-      text: [
-        `Hi ${name},`,
-        ``,
-        `Thanks for reaching out! We received your inquiry about a ${eventType} on ${date}.`,
-        `We'll get back to you as soon as possible.`,
-        ``,
-        `— Silver Lining Band`,
-      ].join("\n"),
-    });
+    const result = await response.json();
+
+    if (!result.success) {
+      return { success: false, error: "Something went wrong. Please try again or email us directly." };
+    }
 
     return { success: true };
   } catch (err) {
-    console.error("Booking email failed:", err);
+    console.error("Booking form submission failed:", err);
     return { success: false, error: "Something went wrong. Please try again or email us directly." };
   }
 }

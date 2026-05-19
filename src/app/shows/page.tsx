@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import { client, isSanityConfigured } from "@/lib/sanity/client";
 import { upcomingShowsQuery, pastShowsQuery } from "@/lib/sanity/queries";
 import { ShowList } from "@/components/shows/show-list";
+import { EventsJsonLd } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
-  title: "Shows | Silver Lining Band",
-  description: "See where Silver Lining Band is playing next.",
+  title: "Shows & Upcoming Gigs",
+  description:
+    "See where Silver Lining Band is playing next in Ottawa and the surrounding area. Live classic rock at venues, festivals, and private events.",
+  alternates: {
+    canonical: "https://silverliningband.ca/shows",
+  },
 };
 
 export const revalidate = 60;
@@ -20,6 +25,7 @@ export default async function ShowsPage() {
 
   return (
     <div className="relative min-h-screen bg-midnight px-6 pt-28 pb-20">
+      <EventsJsonLd shows={upcoming || []} />
       {/* Ambient background gradients */}
       <div
         className="pointer-events-none absolute inset-0"

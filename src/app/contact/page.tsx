@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { BookingForm } from "@/components/book/booking-form";
+import { ContactTabs } from "@/components/contact/contact-tabs";
 
 export const metadata: Metadata = {
-  title: "Book Us | Silver Lining Band",
+  title: "Contact",
   description:
-    "Book Silver Lining Band for your next event — weddings, corporate events, private parties, and more.",
+    "Get in touch with Silver Lining Band — questions, booking inquiries, or just to say hi. Available for weddings, corporate events, and venues across Ottawa.",
+  alternates: {
+    canonical: "https://silverliningband.ca/contact",
+  },
 };
 
-export default function BookPage() {
+export default function ContactPage() {
   return (
     <div className="relative min-h-screen bg-midnight">
       {/* Hero background with dark overlay */}
@@ -30,14 +33,14 @@ export default function BookPage() {
         <div className="mx-auto max-w-xl">
           {/* Editorial header */}
           <p className="text-center font-body text-xs font-medium uppercase tracking-[0.35em] text-amber">
-            Private Events &amp; Performances
+            Questions &amp; Bookings
           </p>
           <h1 className="mt-4 text-center font-display text-5xl font-light italic tracking-tight text-cream sm:text-6xl">
-            Book the Band
+            Reach Out
           </h1>
           <p className="mt-5 text-center font-body text-sm leading-relaxed text-cream-dim">
-            Planning something special? We&apos;d love to bring the music.
-            Fill out the form below and we&apos;ll be in touch.
+            Whether you&apos;re looking to book us or just have a question
+            &mdash; we&apos;d love to hear from you.
           </p>
 
           {/* Ornamental divider */}
@@ -49,9 +52,9 @@ export default function BookPage() {
             <span className="h-px flex-1 bg-gradient-to-l from-transparent to-amber/30" />
           </div>
 
-          {/* Form container */}
-          <div className="mt-12 rounded-xl border border-border-cool bg-charcoal/90 p-6 shadow-2xl backdrop-blur-sm sm:p-8">
-            <BookingForm />
+          {/* Tabbed forms */}
+          <div className="mt-12">
+            <ContactTabs />
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ const scrollLinks = [
 
 const pageLinks = [
   { label: "Shows", href: "/shows" },
-  { label: "Book Us", href: "/book", highlight: true },
+  { label: "Contact", href: "/contact", highlight: true },
 ];
 
 export function Navbar() {

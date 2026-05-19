@@ -166,7 +166,7 @@ export function Hero({ bandName, tagline, heroVideoUrl }: HeroProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
           >
-            <Link href="/book">
+            <Link href="/contact">
               <Button
                 size="lg"
                 className="bg-amber text-midnight hover:bg-amber-light font-body font-medium tracking-[0.1em] uppercase text-xs px-8 py-6 rounded-sm transition-all duration-300 glow-amber-sm hover:glow-amber"

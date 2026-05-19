@@ -23,9 +23,64 @@ const josefin = Josefin_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Silver Lining Band",
+  metadataBase: new URL("https://silverliningband.ca"),
+  title: {
+    default: "Silver Lining Band | Live Music for Events in Ottawa",
+    template: "%s | Silver Lining Band",
+  },
   description:
-    "Classic rock covers from the golden era — Fleetwood Mac, Eagles, Beatles & more. Book us for your next event.",
+    "Ottawa's classic rock cover band — Fleetwood Mac, Eagles, Beatles & more. Available for weddings, corporate events, private parties, and venues across the Ottawa-Gatineau area.",
+  keywords: [
+    "Ottawa live band",
+    "Ottawa cover band",
+    "Ottawa wedding band",
+    "corporate event band Ottawa",
+    "live music Ottawa",
+    "classic rock cover band Ottawa",
+    "Silver Lining Band",
+    "Ottawa-Gatineau live music",
+    "hire a band Ottawa",
+    "event entertainment Ottawa",
+  ],
+  authors: [{ name: "Silver Lining Band" }],
+  openGraph: {
+    type: "website",
+    locale: "en_CA",
+    url: "https://silverliningband.ca",
+    siteName: "Silver Lining Band",
+    title: "Silver Lining Band | Live Music for Events in Ottawa",
+    description:
+      "Ottawa's classic rock cover band — Fleetwood Mac, Eagles, Beatles & more. Available for weddings, corporate events, private parties, and venues.",
+    images: [
+      {
+        url: "/images/band/silverliningband.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Silver Lining Band performing live",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Silver Lining Band | Live Music for Events in Ottawa",
+    description:
+      "Ottawa's classic rock cover band — Fleetwood Mac, Eagles, Beatles & more. Book us for your next event.",
+    images: ["/images/band/silverliningband.jpg"],
+  },
+  alternates: {
+    canonical: "https://silverliningband.ca",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default async function RootLayout({

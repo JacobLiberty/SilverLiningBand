@@ -10,6 +10,7 @@ import { About } from "@/components/home/about";
 import { UpcomingShows } from "@/components/home/upcoming-shows";
 import { Music } from "@/components/home/music";
 import { Gallery } from "@/components/home/gallery";
+import { MusicGroupJsonLd } from "@/components/seo/json-ld";
 
 export const revalidate = 60;
 
@@ -25,6 +26,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <MusicGroupJsonLd />
       <Hero
         bandName={settings?.bandName || "Silver Lining Band"}
         tagline={settings?.tagline || "Classic rock covers from the golden era — Fleetwood Mac, Eagles, Beatles & more"}

@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 const WEB3FORMS_KEY = "c74a1e41-6c48-4510-878f-fdf48b0a6065";
 
-export function BookingForm() {
+export function ContactForm() {
   const [status, setStatus] = useState<
     "idle" | "sending" | "success" | "error"
   >("idle");
@@ -24,8 +24,6 @@ export function BookingForm() {
     const formData = new FormData(e.currentTarget);
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
-    const eventType = formData.get("eventType") as string;
-    const date = formData.get("date") as string;
     const message = formData.get("message") as string;
 
     try {
@@ -37,14 +35,12 @@ export function BookingForm() {
         },
         body: JSON.stringify({
           access_key: WEB3FORMS_KEY,
-          subject: `Booking Inquiry: ${eventType} on ${date}`,
+          subject: `New Message from ${name}`,
           from_name: "Silver Lining Band Website",
           replyto: email,
           Name: name,
           Email: email,
-          "Event Type": eventType,
-          "Preferred Date": date,
-          "Event Details": message,
+          Message: message,
           ...(turnstileToken && { "cf-turnstile-response": turnstileToken }),
         }),
       });
@@ -56,11 +52,15 @@ export function BookingForm() {
         (e.target as HTMLFormElement).reset();
       } else {
         setStatus("error");
-        setErrorMessage(result.message || "Something went wrong. Please try again.");
+        setErrorMessage(
+          result.message || "Something went wrong. Please try again."
+        );
       }
     } catch {
       setStatus("error");
-      setErrorMessage("Could not connect. Please try again or email us directly.");
+      setErrorMessage(
+        "Could not connect. Please try again or email us directly."
+      );
     }
   }
 
@@ -75,17 +75,15 @@ export function BookingForm() {
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-amber/30 bg-amber/10">
           <span className="text-xl text-amber">&#10003;</span>
         </div>
-        <h3 className="font-display text-2xl italic text-cream">
-          Thank You
-        </h3>
+        <h3 className="font-display text-2xl italic text-cream">Thank You</h3>
         <p className="mt-3 font-body text-sm text-cream-dim">
-          We&apos;ve received your inquiry and will be in touch shortly.
+          We&apos;ve received your message and will get back to you soon.
         </p>
         <button
           onClick={() => setStatus("idle")}
           className="mt-6 rounded border border-amber/30 bg-amber/[0.08] px-5 py-2 font-body text-xs font-medium uppercase tracking-[0.15em] text-amber transition-all duration-200 hover:border-amber/50 hover:bg-amber/[0.15]"
         >
-          Send Another Inquiry
+          Send Another Message
         </button>
       </motion.div>
     );
@@ -101,13 +99,13 @@ export function BookingForm() {
     >
       <div>
         <Label
-          htmlFor="name"
+          htmlFor="contact-name"
           className="font-body text-xs font-medium uppercase tracking-[0.15em] text-silver"
         >
           Name
         </Label>
         <Input
-          id="name"
+          id="contact-name"
           name="name"
           required
           placeholder="Your name"
@@ -117,13 +115,13 @@ export function BookingForm() {
 
       <div>
         <Label
-          htmlFor="email"
+          htmlFor="contact-email"
           className="font-body text-xs font-medium uppercase tracking-[0.15em] text-silver"
         >
           Email
         </Label>
         <Input
-          id="email"
+          id="contact-email"
           name="email"
           type="email"
           required
@@ -134,51 +132,17 @@ export function BookingForm() {
 
       <div>
         <Label
-          htmlFor="eventType"
+          htmlFor="contact-message"
           className="font-body text-xs font-medium uppercase tracking-[0.15em] text-silver"
         >
-          Event Type
-        </Label>
-        <Input
-          id="eventType"
-          name="eventType"
-          required
-          placeholder="Wedding, Corporate, Festival, Private Party..."
-          className="mt-2 h-10 border-border-cool bg-smoke/80 text-cream placeholder:text-silver-dim focus-visible:border-amber/40 focus-visible:ring-amber/20"
-        />
-      </div>
-
-      <div>
-        <Label
-          htmlFor="date"
-          className="font-body text-xs font-medium uppercase tracking-[0.15em] text-silver"
-        >
-          Preferred Date
-        </Label>
-        <Input
-          id="date"
-          name="date"
-          type="date"
-          required
-          min={new Date().toISOString().split("T")[0]}
-          max="2099-12-31"
-          className="mt-2 h-10 border-border-cool bg-smoke/80 text-cream placeholder:text-silver-dim focus-visible:border-amber/40 focus-visible:ring-amber/20"
-        />
-      </div>
-
-      <div>
-        <Label
-          htmlFor="message"
-          className="font-body text-xs font-medium uppercase tracking-[0.15em] text-silver"
-        >
-          Tell Us About Your Event
+          Message
         </Label>
         <Textarea
-          id="message"
+          id="contact-message"
           name="message"
           required
-          rows={4}
-          placeholder="Venue, expected guests, any special requests..."
+          rows={5}
+          placeholder="What's on your mind? Ask us anything..."
           className="mt-2 border-border-cool bg-smoke/80 text-cream placeholder:text-silver-dim focus-visible:border-amber/40 focus-visible:ring-amber/20"
         />
       </div>
@@ -206,7 +170,7 @@ export function BookingForm() {
         disabled={status === "sending"}
         className="glow-amber-sm w-full bg-amber py-2.5 font-body text-xs font-semibold uppercase tracking-[0.2em] text-midnight transition-all duration-200 hover:bg-amber-light disabled:opacity-50"
       >
-        {status === "sending" ? "Sending..." : "Send Inquiry"}
+        {status === "sending" ? "Sending..." : "Send Message"}
       </Button>
     </motion.form>
   );

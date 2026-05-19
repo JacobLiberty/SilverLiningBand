@@ -51,36 +51,6 @@ function getCaption(item: DisplayImage): string {
   return item.caption ?? "Band photo";
 }
 
-/**
- * Repeating 5-item bento block pattern (3 cols, 2 rows):
- *
- *  ┌──────────┬─────┐
- *  │          │  2  │
- *  │    1     ├─────┤
- *  │  (big)   │  3  │
- *  ├────┬─────┴─────┤
- *  │ 4  │     5     │
- *  └────┴───────────┘
- *
- * Each block = 5 images filling a clean rectangle.
- * Blocks stack vertically for any number of images.
- */
-const BLOCK_PATTERN = [
-  "col-span-2 row-span-2", // 0 — large
-  "col-span-1 row-span-1", // 1 — top right
-  "col-span-1 row-span-1", // 2 — mid right
-  "col-span-1 row-span-1", // 3 — bottom left
-  "col-span-2 row-span-1", // 4 — wide bottom right
-];
-
-function getBentoClass(index: number): string {
-  return BLOCK_PATTERN[index % BLOCK_PATTERN.length];
-}
-
-function isLargeItem(index: number): boolean {
-  return index % BLOCK_PATTERN.length === 0;
-}
-
 const itemVariants = {
   hidden: { opacity: 0, scale: 0.93, y: 20 },
   visible: (i: number) => ({
@@ -100,10 +70,6 @@ export function Gallery({ images }: GalleryProps) {
 
   const displayImages: readonly DisplayImage[] =
     images.length > 0 ? images : STOCK_IMAGES;
-
-  // Calculate total rows: each block of 5 uses 3 rows
-  const blockCount = Math.ceil(displayImages.length / 5);
-  const totalRows = blockCount * 3;
 
   return (
     <section id="gallery" className="relative bg-charcoal px-6 py-28 md:py-36 overflow-hidden">
@@ -141,17 +107,12 @@ export function Gallery({ images }: GalleryProps) {
           <span className="text-amber text-sm">&#9835;</span>
         </motion.div>
 
-        {/* Bento grid — repeating 5-item blocks */}
-        <div
-          className="grid grid-cols-3 gap-2 md:gap-3"
-          style={{
-            gridTemplateRows: `repeat(${totalRows}, 200px)`,
-          }}
-        >
+        {/* Masonry grid — CSS columns for natural aspect ratios */}
+        <div className="columns-2 md:columns-3 gap-2 md:gap-3 space-y-2 md:space-y-3">
           {displayImages.map((item, i) => (
             <motion.button
               key={item._id}
-              className={`group relative overflow-hidden rounded-sm ${getBentoClass(i)}`}
+              className="group relative w-full overflow-hidden rounded-sm break-inside-avoid"
               onClick={() => setSelectedImage(item)}
               custom={i}
               variants={itemVariants}
@@ -161,11 +122,12 @@ export function Gallery({ images }: GalleryProps) {
               aria-label={`View ${getCaption(item)}`}
             >
               <Image
-                src={getImageUrl(item, isLargeItem(i) ? 800 : 400)}
+                src={getImageUrl(item, 600)}
                 alt={getCaption(item)}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                sizes={isLargeItem(i) ? "(max-width: 768px) 100vw, 60vw" : "(max-width: 768px) 50vw, 30vw"}
+                width={600}
+                height={400}
+                className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 768px) 50vw, 33vw"
               />
               {/* Hover overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-amber/25 via-midnight/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

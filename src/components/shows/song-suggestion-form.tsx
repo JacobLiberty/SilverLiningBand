@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useApiForm } from "@/lib/useApiForm";
 
+const WEB3FORMS_KEY = "c74a1e41-6c48-4510-878f-fdf48b0a6065";
+
 interface SongSuggestionFormProps {
   showId: string;
   showTitle: string;
@@ -18,16 +20,36 @@ export function SongSuggestionForm({ showId, showTitle }: SongSuggestionFormProp
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const songTitle = formData.get("songTitle") as string;
+    const artist = formData.get("artist") as string;
+    const requesterName = formData.get("requesterName") as string;
+    const email = formData.get("email") as string;
+    const message = formData.get("message") as string;
+
+    // Best-effort notification email — Web3Forms only allows browser-side calls
+    // on the free plan, so this has to happen here, not in the API route. It's
+    // fire-and-forget: the songSuggestion record in Sanity (via `submit` below)
+    // is the durable source of truth, so a Web3Forms hiccup shouldn't block the
+    // actual submission.
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        from_name: "Silver Lining Band Website",
+        subject: `Song Suggestion: "${songTitle}" for ${showTitle}`,
+        replyto: email,
+        Song: songTitle,
+        ...(artist && { Artist: artist }),
+        Show: showTitle,
+        ...(requesterName && { "Requester Name": requesterName }),
+        Email: email,
+        ...(message && { Message: message }),
+      }),
+    }).catch((err) => console.error("Band notification email failed:", err));
+
     await submit(
-      {
-        songTitle: formData.get("songTitle"),
-        artist: formData.get("artist"),
-        requesterName: formData.get("requesterName"),
-        email: formData.get("email"),
-        message: formData.get("message"),
-        showId,
-        showTitle,
-      },
+      { songTitle, artist, requesterName, email, message, showId, showTitle },
       e.currentTarget
     );
   }

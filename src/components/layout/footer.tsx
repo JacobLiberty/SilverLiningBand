@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FooterNewsletterForm } from "./footer-newsletter-form";
 
 interface FooterProps {
   socialLinks?: {
@@ -70,20 +71,15 @@ export function Footer({ socialLinks }: FooterProps) {
             </p>
           </div>
 
-          {/* Contact CTA */}
+          {/* Mailing List */}
           <div className="flex flex-col items-start md:items-center">
             <h4 className="text-xs font-body font-medium tracking-[0.2em] uppercase text-amber mb-4">
-              Reach Out
+              Stay in the Loop
             </h4>
             <p className="text-sm text-cream-dim leading-relaxed mb-4 text-center max-w-[220px]">
-              Have a question or planning an event? We&apos;d love to hear from you.
+              Get new show announcements first — no spam, just music.
             </p>
-            <Link
-              href="/contact"
-              className="inline-block rounded-sm bg-amber px-6 py-2.5 text-xs font-body font-medium tracking-[0.15em] uppercase text-midnight transition-all duration-300 hover:bg-amber-light glow-amber-sm"
-            >
-              Get in Touch
-            </Link>
+            <FooterNewsletterForm />
           </div>
 
           {/* Social + Links */}

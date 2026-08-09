@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { buildGoogleCalendarUrl, buildGoogleMapsUrl } from "@/lib/calendar";
+import { SITE_TIME_ZONE, buildGoogleCalendarUrl, buildGoogleMapsUrl } from "@/lib/calendar";
 
 interface Show {
   _id: string;
+  slug: string;
   title: string;
   date: string;
   venue: string;
@@ -21,13 +22,17 @@ interface UpcomingShowsProps {
 }
 
 function formatDay(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString("en-US", { day: "numeric" });
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    day: "numeric",
+    timeZone: SITE_TIME_ZONE,
+  });
 }
 
 function formatMonthYear(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString("en-US", {
     month: "short",
     year: "numeric",
+    timeZone: SITE_TIME_ZONE,
   });
 }
 
@@ -35,6 +40,7 @@ function formatTime(dateStr: string): string {
   return new Date(dateStr).toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
+    timeZone: SITE_TIME_ZONE,
   });
 }
 
@@ -122,15 +128,18 @@ export function UpcomingShows({ shows }: UpcomingShowsProps) {
 
               <div className="flex flex-1 items-center justify-between gap-4 px-6 py-5">
                 <div className="flex items-center gap-6">
-                  {/* Large editorial date */}
-                  <div className="hidden min-w-[60px] flex-col items-center sm:flex">
+                  {/* Large editorial date — links to show details */}
+                  <Link
+                    href={`/shows/${show.slug}`}
+                    className="hidden min-w-[60px] flex-col items-center transition-colors hover:text-amber sm:flex"
+                  >
                     <span className="font-display text-3xl leading-none text-amber">
                       {formatDay(show.date)}
                     </span>
                     <span className="mt-1 text-[10px] font-medium uppercase tracking-[0.2em] text-cream-dim">
                       {formatMonthYear(show.date)}
                     </span>
-                  </div>
+                  </Link>
 
                   {/* Divider line (desktop) */}
                   <div className="hidden h-12 w-px bg-border-warm sm:block" />
@@ -142,11 +151,15 @@ export function UpcomingShows({ shows }: UpcomingShowsProps) {
                         month: "long",
                         day: "numeric",
                         year: "numeric",
+                        timeZone: SITE_TIME_ZONE,
                       })}
                     </p>
-                    <p className="mt-0.5 text-lg text-silver-light sm:mt-0">
+                    <Link
+                      href={`/shows/${show.slug}`}
+                      className="mt-0.5 block text-lg text-silver-light transition-colors hover:text-amber sm:mt-0"
+                    >
                       {show.title}
-                    </p>
+                    </Link>
                     <p className="mt-1 text-sm text-cream-dim">
                       <a
                         href={buildGoogleMapsUrl(show.address)}

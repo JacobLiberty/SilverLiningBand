@@ -10,6 +10,7 @@ import { About } from "@/components/home/about";
 import { UpcomingShows } from "@/components/home/upcoming-shows";
 import { Music } from "@/components/home/music";
 import { Gallery } from "@/components/home/gallery";
+import { MailingListCta } from "@/components/home/mailing-list-cta";
 import { MusicGroupJsonLd } from "@/components/seo/json-ld";
 
 export const revalidate = 60;
@@ -38,6 +39,7 @@ export default async function HomePage() {
         aboutImageUrl={settings?.aboutImageUrl}
       />
       <UpcomingShows shows={shows || []} />
+      <MailingListCta id="mailing-list" />
       <Music videos={videos || []} />
       <Gallery images={gallery || []} />
     </>

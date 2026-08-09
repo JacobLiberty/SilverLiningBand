@@ -6,6 +6,7 @@ import { ShowCard } from "./show-card";
 
 interface Show {
   _id: string;
+  slug: string;
   title: string;
   date: string;
   venue: string;

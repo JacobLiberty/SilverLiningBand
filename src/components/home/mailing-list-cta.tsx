@@ -11,8 +11,7 @@ interface MailingListCtaProps {
 }
 
 export function MailingListCta({ id }: MailingListCtaProps) {
-  const { status, errorMessage, submit, setTurnstileToken, turnstileReady } =
-    useApiForm("/api/subscribe");
+  const { status, errorMessage, submit, setTurnstileToken } = useApiForm("/api/subscribe");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -68,7 +67,7 @@ export function MailingListCta({ id }: MailingListCtaProps) {
               />
               <Button
                 type="submit"
-                disabled={status === "sending" || !turnstileReady}
+                disabled={status === "sending"}
                 className="glow-amber-sm h-12 shrink-0 bg-amber px-7 font-body text-xs font-semibold uppercase tracking-[0.2em] text-midnight transition-all duration-200 hover:bg-amber-light disabled:opacity-50"
               >
                 {status === "sending" ? "Joining..." : "Sign Up"}

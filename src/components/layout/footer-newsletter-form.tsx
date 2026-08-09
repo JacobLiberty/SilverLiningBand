@@ -6,8 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useApiForm } from "@/lib/useApiForm";
 
 export function FooterNewsletterForm() {
-  const { status, errorMessage, submit, setTurnstileToken, turnstileReady } =
-    useApiForm("/api/subscribe");
+  const { status, errorMessage, submit, setTurnstileToken } = useApiForm("/api/subscribe");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -36,7 +35,7 @@ export function FooterNewsletterForm() {
       />
       <Button
         type="submit"
-        disabled={status === "sending" || !turnstileReady}
+        disabled={status === "sending"}
         className="h-9 bg-amber font-body text-xs font-medium tracking-[0.15em] uppercase text-midnight transition-all duration-300 hover:bg-amber-light disabled:opacity-50"
       >
         {status === "sending" ? "Joining..." : "Sign Up"}

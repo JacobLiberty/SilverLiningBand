@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isWriteClientConfigured, writeClient } from "@/lib/sanity/writeClient";
 import { isValidEmail } from "@/lib/validate";
-import { verifyTurnstileToken } from "@/lib/turnstile";
 
 const ALLOWED_SOURCES = ["homepage", "footer", "song-suggestion"];
 
@@ -28,13 +27,6 @@ export async function POST(request: NextRequest) {
   if (!ALLOWED_SOURCES.includes(source)) {
     return NextResponse.json(
       { success: false, message: "Invalid signup source." },
-      { status: 400 }
-    );
-  }
-
-  if (!(await verifyTurnstileToken(body?.["cf-turnstile-response"]))) {
-    return NextResponse.json(
-      { success: false, message: "Verification failed. Please try again." },
       { status: 400 }
     );
   }

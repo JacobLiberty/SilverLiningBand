@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { isWriteClientConfigured, writeClient } from "@/lib/sanity/writeClient";
 import { sendBandNotification } from "@/lib/email";
 import { isValidEmail } from "@/lib/validate";
-import { verifyTurnstileToken } from "@/lib/turnstile";
 
 export async function POST(request: NextRequest) {
   if (!isWriteClientConfigured) {
@@ -39,13 +38,6 @@ export async function POST(request: NextRequest) {
   if (!showId) {
     return NextResponse.json(
       { success: false, message: "Missing show reference." },
-      { status: 400 }
-    );
-  }
-
-  if (!(await verifyTurnstileToken(body?.["cf-turnstile-response"]))) {
-    return NextResponse.json(
-      { success: false, message: "Verification failed. Please try again." },
       { status: 400 }
     );
   }

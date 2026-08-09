@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Turnstile } from "@marsidev/react-turnstile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useApiForm } from "@/lib/useApiForm";
@@ -11,7 +10,7 @@ interface MailingListCtaProps {
 }
 
 export function MailingListCta({ id }: MailingListCtaProps) {
-  const { status, errorMessage, submit, setTurnstileToken } = useApiForm("/api/subscribe");
+  const { status, errorMessage, submit } = useApiForm("/api/subscribe");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -72,13 +71,6 @@ export function MailingListCta({ id }: MailingListCtaProps) {
               >
                 {status === "sending" ? "Joining..." : "Sign Up"}
               </Button>
-              {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
-                <Turnstile
-                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-                  onSuccess={setTurnstileToken}
-                  options={{ size: "invisible" }}
-                />
-              )}
             </form>
           )}
 

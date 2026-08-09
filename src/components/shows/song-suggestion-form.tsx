@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Turnstile } from "@marsidev/react-turnstile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,8 +13,7 @@ interface SongSuggestionFormProps {
 }
 
 export function SongSuggestionForm({ showId, showTitle }: SongSuggestionFormProps) {
-  const { status, errorMessage, submit, setTurnstileToken, reset } =
-    useApiForm("/api/song-suggestion");
+  const { status, errorMessage, submit, reset } = useApiForm("/api/song-suggestion");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -162,14 +160,6 @@ export function SongSuggestionForm({ showId, showTitle }: SongSuggestionFormProp
         >
           {errorMessage}
         </motion.p>
-      )}
-
-      {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
-        <Turnstile
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-          onSuccess={setTurnstileToken}
-          options={{ size: "invisible" }}
-        />
       )}
 
       <Button

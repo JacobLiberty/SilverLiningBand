@@ -1,12 +1,11 @@
 "use client";
 
-import { Turnstile } from "@marsidev/react-turnstile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useApiForm } from "@/lib/useApiForm";
 
 export function FooterNewsletterForm() {
-  const { status, errorMessage, submit, setTurnstileToken } = useApiForm("/api/subscribe");
+  const { status, errorMessage, submit } = useApiForm("/api/subscribe");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -41,13 +40,6 @@ export function FooterNewsletterForm() {
         {status === "sending" ? "Joining..." : "Sign Up"}
       </Button>
       {status === "error" && <p className="font-body text-xs text-red-400">{errorMessage}</p>}
-      {process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
-        <Turnstile
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-          onSuccess={setTurnstileToken}
-          options={{ size: "invisible" }}
-        />
-      )}
     </form>
   );
 }

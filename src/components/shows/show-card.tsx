@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { buildGoogleCalendarUrl, buildGoogleMapsUrl } from "@/lib/calendar";
+import { SITE_TIME_ZONE, buildGoogleCalendarUrl, buildGoogleMapsUrl } from "@/lib/calendar";
 
 interface ShowCardProps {
+  slug: string;
   title: string;
   date: string;
   venue: string;
@@ -16,6 +18,7 @@ interface ShowCardProps {
 }
 
 export function ShowCard({
+  slug,
   title,
   date,
   venue,
@@ -28,14 +31,18 @@ export function ShowCard({
   const showImage = imageUrl || image;
   const dateObj = new Date(date);
   const month = dateObj
-    .toLocaleDateString("en-US", { month: "short" })
+    .toLocaleDateString("en-US", { month: "short", timeZone: SITE_TIME_ZONE })
     .toUpperCase();
-  const day = dateObj.getDate();
-  const weekday = dateObj.toLocaleDateString("en-US", { weekday: "long" });
-  const year = dateObj.getFullYear();
+  const day = dateObj.toLocaleDateString("en-US", { day: "numeric", timeZone: SITE_TIME_ZONE });
+  const weekday = dateObj.toLocaleDateString("en-US", {
+    weekday: "long",
+    timeZone: SITE_TIME_ZONE,
+  });
+  const year = dateObj.toLocaleDateString("en-US", { year: "numeric", timeZone: SITE_TIME_ZONE });
   const time = dateObj.toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
+    timeZone: SITE_TIME_ZONE,
   });
 
   const mapsUrl = buildGoogleMapsUrl(address);
@@ -46,6 +53,7 @@ export function ShowCard({
     address,
     description,
   });
+  const detailsHref = `/shows/${slug}`;
 
   return (
     <motion.div
@@ -53,9 +61,12 @@ export function ShowCard({
       whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
     >
-      {/* Venue image */}
+      {/* Venue image — links to show details */}
       {showImage && (
-        <div className="relative hidden w-32 shrink-0 sm:block lg:w-40">
+        <Link
+          href={detailsHref}
+          className="relative hidden w-32 shrink-0 sm:block lg:w-40"
+        >
           <Image
             src={showImage}
             alt={venue}
@@ -64,7 +75,7 @@ export function ShowCard({
             sizes="160px"
           />
           <div className="absolute inset-0 bg-linear-to-r from-transparent to-charcoal/60" />
-        </div>
+        </Link>
       )}
 
       {/* Amber left accent (shown when no image, or on mobile) */}
@@ -73,8 +84,11 @@ export function ShowCard({
       )}
 
       <div className="flex flex-1 flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:gap-6 sm:px-6">
-        {/* Editorial date block */}
-        <div className="flex shrink-0 flex-col items-center text-center sm:min-w-[60px]">
+        {/* Editorial date block — links to show details */}
+        <Link
+          href={detailsHref}
+          className="flex shrink-0 flex-col items-center text-center transition-colors hover:text-amber sm:min-w-[60px]"
+        >
           <span className="font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-amber">
             {month}
           </span>
@@ -84,16 +98,19 @@ export function ShowCard({
           <span className="mt-0.5 font-body text-[10px] text-silver-dim">
             {year}
           </span>
-        </div>
+        </Link>
 
         {/* Vertical separator (desktop) */}
         <div className="hidden h-12 w-px bg-border-cool sm:block" />
 
         {/* Event details */}
         <div className="min-w-0 flex-1">
-          <p className="font-display text-lg leading-snug text-cream sm:text-xl">
+          <Link
+            href={detailsHref}
+            className="font-display text-lg leading-snug text-cream transition-colors hover:text-amber sm:text-xl"
+          >
             {title}
-          </p>
+          </Link>
           <p className="mt-1 font-body text-sm text-silver">
             <a
               href={mapsUrl}
@@ -131,7 +148,7 @@ export function ShowCard({
             {address}
           </a>
           {description && (
-            <p className="mt-2 font-body text-xs leading-relaxed text-silver-dim">
+            <p className="mt-2 line-clamp-2 font-body text-xs leading-relaxed text-silver-dim">
               {description}
             </p>
           )}

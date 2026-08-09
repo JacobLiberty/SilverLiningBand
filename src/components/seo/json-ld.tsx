@@ -1,3 +1,12 @@
+/**
+ * JSON.stringify doesn't escape `<`, so a CMS field containing the literal
+ * text "</script>" could otherwise terminate this tag early and inject
+ * arbitrary HTML into the page. < is invisible to JSON-LD consumers.
+ */
+function safeJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
 interface Show {
   _id: string;
   title: string;
@@ -50,7 +59,7 @@ export function MusicGroupJsonLd() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
     />
   );
 }
@@ -85,7 +94,7 @@ export function EventsJsonLd({ shows }: { shows: Show[] }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
     />
   );
 }

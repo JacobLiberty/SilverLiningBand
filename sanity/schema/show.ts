@@ -1,4 +1,4 @@
-import { defineType, defineField } from "sanity";
+import { defineType, defineField, defineArrayMember } from "sanity";
 
 export const show = defineType({
   name: "show",
@@ -10,6 +10,31 @@ export const show = defineType({
       title: "Event / Venue Name",
       type: "string",
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      description: "Used in the show's URL. Click \"Generate\" after setting the title and date.",
+      options: {
+        source: (doc) =>
+          `${doc.title ?? ""} ${typeof doc.date === "string" ? doc.date.slice(0, 10) : ""}`,
+        maxLength: 96,
+      },
+      validation: (rule) =>
+        rule.required().custom(async (slug, context) => {
+          if (!slug?.current) return true;
+
+          const client = context.getClient({ apiVersion: "2026-04-29" });
+          const id = context.document?._id?.replace(/^drafts\./, "");
+
+          const existing = await client.fetch(
+            `count(*[_type == "show" && slug.current == $slug && !(_id in [$id, "drafts." + $id])])`,
+            { slug: slug.current, id }
+          );
+
+          return existing === 0 || "This slug is already used by another show";
+        }),
     }),
     defineField({
       name: "date",
@@ -48,6 +73,15 @@ export const show = defineType({
       title: "Description",
       type: "text",
       rows: 3,
+      description: "Any http(s):// links you paste in here will automatically become clickable.",
+    }),
+    defineField({
+      name: "setlist",
+      title: "Setlist",
+      type: "array",
+      of: [defineArrayMember({ type: "string" })],
+      description:
+        "Optional — songs played or planned for this show, in order. Leave empty to hide the setlist on the show's page.",
     }),
   ],
   orderings: [

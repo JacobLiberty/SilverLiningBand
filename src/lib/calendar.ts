@@ -1,3 +1,10 @@
+/**
+ * The band's local timezone (Ottawa). Always pass this to date/time formatting
+ * so show times render the same regardless of the server's or visitor's own
+ * timezone — otherwise server-rendered HTML and client hydration can disagree.
+ */
+export const SITE_TIME_ZONE = "America/Toronto";
+
 /** Build a Google Calendar "add event" URL */
 export function buildGoogleCalendarUrl({
   title,

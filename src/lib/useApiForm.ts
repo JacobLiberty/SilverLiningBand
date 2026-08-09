@@ -7,18 +7,16 @@ type Status = "idle" | "sending" | "success" | "error";
 /**
  * Shared submit/status/Turnstile logic for the site's public POST-to-API forms.
  *
- * `turnstileReady` stays true when Turnstile isn't configured, and only turns
- * true once a token has arrived when it is configured — the invisible widget's
- * onSuccess callback fires asynchronously, so gating on it prevents a fast
- * submit from going out tokenless and getting rejected server-side.
+ * The Turnstile token is sent along when available, but submission is never
+ * blocked waiting for it — the invisible widget's onSuccess callback fires
+ * asynchronously and isn't guaranteed to resolve before a user submits (or at
+ * all), so gating the button on it risks bricking the form entirely. The
+ * server treats Turnstile as best-effort too (src/lib/turnstile.ts).
  */
 export function useApiForm(endpoint: string) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
-
-  const turnstileConfigured = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
-  const turnstileReady = !turnstileConfigured || Boolean(turnstileToken);
 
   async function submit(payload: Record<string, unknown>, formEl?: HTMLFormElement) {
     setStatus("sending");
@@ -54,7 +52,6 @@ export function useApiForm(endpoint: string) {
     errorMessage,
     submit,
     setTurnstileToken,
-    turnstileReady,
     reset: () => setStatus("idle"),
   };
 }

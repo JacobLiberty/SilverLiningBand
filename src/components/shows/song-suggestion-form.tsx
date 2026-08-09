@@ -14,7 +14,7 @@ interface SongSuggestionFormProps {
 }
 
 export function SongSuggestionForm({ showId, showTitle }: SongSuggestionFormProps) {
-  const { status, errorMessage, submit, setTurnstileToken, turnstileReady, reset } =
+  const { status, errorMessage, submit, setTurnstileToken, reset } =
     useApiForm("/api/song-suggestion");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -174,7 +174,7 @@ export function SongSuggestionForm({ showId, showTitle }: SongSuggestionFormProp
 
       <Button
         type="submit"
-        disabled={status === "sending" || !turnstileReady}
+        disabled={status === "sending"}
         className="glow-amber-sm w-full bg-amber py-2.5 font-body text-xs font-semibold uppercase tracking-[0.2em] text-midnight transition-all duration-200 hover:bg-amber-light disabled:opacity-50"
       >
         {status === "sending" ? "Sending..." : "Suggest This Song"}

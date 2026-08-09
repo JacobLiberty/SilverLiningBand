@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isWriteClientConfigured, writeClient } from "@/lib/sanity/writeClient";
-import { sendBandNotification } from "@/lib/email";
 import { isValidEmail } from "@/lib/validate";
 
 export async function POST(request: NextRequest) {
@@ -19,7 +18,6 @@ export async function POST(request: NextRequest) {
   const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
   const message = typeof body?.message === "string" ? body.message.trim() : "";
   const showId = typeof body?.showId === "string" ? body.showId : "";
-  const showTitle = typeof body?.showTitle === "string" ? body.showTitle : "the show";
 
   if (!songTitle) {
     return NextResponse.json(
@@ -53,20 +51,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    // Send the notification before writing to Sanity — if Web3Forms fails, we
-    // return early with nothing persisted, so a client retry can't create
-    // duplicate songSuggestion/subscriber records for the same request.
-    await sendBandNotification({
-      subject: `Song Suggestion: "${songTitle}" for ${showTitle}`,
-      replyto: email,
-      Song: songTitle,
-      ...(artist && { Artist: artist }),
-      Show: showTitle,
-      ...(requesterName && { "Requester Name": requesterName }),
-      Email: email,
-      ...(message && { Message: message }),
-    });
 
     await writeClient.create({
       _type: "songSuggestion",

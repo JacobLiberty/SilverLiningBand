@@ -45,6 +45,7 @@ const socialIcons = [
 const footerLinks = [
   { label: "Shows", href: "/shows" },
   { label: "Contact", href: "/contact" },
+  { label: "Privacy", href: "/privacy" },
 ];
 
 export function Footer({ socialLinks }: FooterProps) {
